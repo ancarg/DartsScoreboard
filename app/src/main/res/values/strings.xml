@@ -11,6 +11,7 @@
     <string name="player_1">Player 1</string>
     <string name="player_2">Player 2</string>
     <string name="remove_player">Remove player</string>
+    <string name="cannot_remove_last_player">Cannot remove the last player</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="player_name_hint">Player Name</string>

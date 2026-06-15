@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -51,8 +52,16 @@ public class FirstFragment extends Fragment {
         AlertDialog dialog = builder.create();
 
         buttonRemove.setOnClickListener(v -> {
-            targetButton.setText(""); // Or some default
-            dialog.dismiss();
+            int visibleButtons = 0;
+            if (binding.buttonPlayer1.getVisibility() == View.VISIBLE) visibleButtons++;
+            if (binding.buttonPlayer2.getVisibility() == View.VISIBLE) visibleButtons++;
+
+            if (visibleButtons <= 1) {
+                Toast.makeText(requireContext(), R.string.cannot_remove_last_player, Toast.LENGTH_SHORT).show();
+            } else {
+                targetButton.setVisibility(View.GONE);
+                dialog.dismiss();
+            }
         });
 
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
