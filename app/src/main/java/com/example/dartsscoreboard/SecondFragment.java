@@ -11,6 +11,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.dartsscoreboard.databinding.FragmentSecondBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
@@ -33,6 +36,28 @@ public class SecondFragment extends Fragment {
                 NavHostFragment.findNavController(SecondFragment.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment)
         );
+
+        displayGameSummary();
+    }
+
+    private void displayGameSummary() {
+        if (getArguments() != null) {
+            List<String> playerNames = getArguments().getStringArrayList("playerNames");
+            int firstTo = getArguments().getInt("firstTo");
+            int legLength = getArguments().getInt("legLength");
+
+            StringBuilder summary = new StringBuilder();
+            summary.append("Players (").append(playerNames != null ? playerNames.size() : 0).append("):\n");
+            if (playerNames != null) {
+                for (String name : playerNames) {
+                    summary.append("- ").append(name).append("\n");
+                }
+            }
+            summary.append("\nFirst to: ").append(firstTo).append(" legs");
+            summary.append("\nLeg length: ").append(legLength);
+
+            binding.textviewGameSummary.setText(summary.toString());
+        }
     }
 
     @Override

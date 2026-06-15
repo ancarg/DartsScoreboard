@@ -1,9 +1,12 @@
 package com.example.dartsscoreboard;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,10 +15,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.dartsscoreboard.databinding.FragmentFirstBinding;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FirstFragment extends Fragment {
@@ -23,6 +29,10 @@ public class FirstFragment extends Fragment {
     private FragmentFirstBinding binding;
     private final List<Integer> playerButtonIds = new ArrayList<>();
     private int playerSequence = 2; // Starts with 2 players
+    private int maxNoPlayers = 4; //maximum number of players
+    private int defaultFirstTo = 8; //the default value for first to x legs config
+    private int[] legLength = new int[]  {301, 501}; //the length of a leg
+    private int selectedLegLength = 501;
 
     @Override
     public View onCreateView(
@@ -44,16 +54,87 @@ public class FirstFragment extends Fragment {
         binding.buttonPlayer2.setOnClickListener(v -> showEditPlayerDialog(binding.buttonPlayer2));
 
         binding.buttonAddPlayer.setOnClickListener(v -> addPlayer());
+
+        binding.edittextFirstTo.setText(String.valueOf(defaultFirstTo));
+        binding.edittextFirstTo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().isEmpty()) {
+                    try {
+                        defaultFirstTo = Integer.parseInt(s.toString());
+                    } catch (NumberFormatException e) {
+                        // Handle invalid input if necessary
+                    }
+                }
+            }
+        });
+
+        setupLegLengthDropdown();
+
+        binding.buttonStart.setOnClickListener(v -> startGame());
+    }
+
+    private void setupLegLengthDropdown() {
+        List<String> options = new ArrayList<>();
+        for (int length : legLength) {
+            options.add(String.valueOf(length));
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, options);
+        binding.dropdownLegLength.setAdapter(adapter);
+        
+        // Set default selection
+        binding.dropdownLegLength.setText(String.valueOf(selectedLegLength), false);
+        
+        binding.dropdownLegLength.setOnItemClickListener((parent, view, position, id) -> {
+            selectedLegLength = legLength[position];
+        });
+    }
+
+    private void startGame() {
+        List<String> playerNames = new ArrayList<>();
+        // Get name from button_player_1 if visible
+        if (binding.buttonPlayer1.getVisibility() == View.VISIBLE) {
+            playerNames.add(binding.buttonPlayer1.getText().toString());
+        }
+        // Get name from button_player_2 if visible
+        if (binding.buttonPlayer2.getVisibility() == View.VISIBLE) {
+            playerNames.add(binding.buttonPlayer2.getText().toString());
+        }
+        
+        // Get names from dynamically added buttons
+        int childCount = binding.playerButtonsContainer.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = binding.playerButtonsContainer.getChildAt(i);
+            if (child instanceof Button && child.getId() != binding.buttonPlayer1.getId() && child.getId() != binding.buttonPlayer2.getId()) {
+                if (child.getVisibility() == View.VISIBLE) {
+                    playerNames.add(((Button) child).getText().toString());
+                }
+            }
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("playerNames", new ArrayList<>(playerNames));
+        bundle.putInt("firstTo", defaultFirstTo);
+        bundle.putInt("legLength", selectedLegLength);
+
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
     }
 
     private void addPlayer() {
-        if (playerButtonIds.size() >= 4) {
+        if (playerButtonIds.size() >= this.maxNoPlayers) {
             Toast.makeText(requireContext(), R.string.max_players_reached, Toast.LENGTH_SHORT).show();
             return;
         }
 
         playerSequence++;
-        Button newPlayerButton = new Button(requireContext());
+        MaterialButton newPlayerButton = new MaterialButton(requireContext());
         int newId = View.generateViewId();
         newPlayerButton.setId(newId);
         
