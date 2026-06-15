@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,26 +15,60 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dartsscoreboard.databinding.FragmentFirstBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
+    private final List<Integer> playerButtonIds = new ArrayList<>();
+    private int playerSequence = 2; // Starts with 2 players
 
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Initialize with existing buttons
+        playerButtonIds.add(binding.buttonPlayer1.getId());
+        playerButtonIds.add(binding.buttonPlayer2.getId());
+
         binding.buttonPlayer1.setOnClickListener(v -> showEditPlayerDialog(binding.buttonPlayer1));
         binding.buttonPlayer2.setOnClickListener(v -> showEditPlayerDialog(binding.buttonPlayer2));
+
+        binding.buttonAddPlayer.setOnClickListener(v -> addPlayer());
+    }
+
+    private void addPlayer() {
+        if (playerButtonIds.size() >= 4) {
+            Toast.makeText(requireContext(), R.string.max_players_reached, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        playerSequence++;
+        Button newPlayerButton = new Button(requireContext());
+        int newId = View.generateViewId();
+        newPlayerButton.setId(newId);
+        
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.topMargin = (int) (16 * getResources().getDisplayMetrics().density);
+        newPlayerButton.setLayoutParams(params);
+        
+        newPlayerButton.setText(getString(R.string.player_label, playerSequence));
+        newPlayerButton.setOnClickListener(v -> showEditPlayerDialog(newPlayerButton));
+
+        binding.playerButtonsContainer.addView(newPlayerButton);
+        playerButtonIds.add(newId);
     }
 
     private void showEditPlayerDialog(Button targetButton) {
@@ -52,14 +87,11 @@ public class FirstFragment extends Fragment {
         AlertDialog dialog = builder.create();
 
         buttonRemove.setOnClickListener(v -> {
-            int visibleButtons = 0;
-            if (binding.buttonPlayer1.getVisibility() == View.VISIBLE) visibleButtons++;
-            if (binding.buttonPlayer2.getVisibility() == View.VISIBLE) visibleButtons++;
-
-            if (visibleButtons <= 1) {
+            if (playerButtonIds.size() <= 1) {
                 Toast.makeText(requireContext(), R.string.cannot_remove_last_player, Toast.LENGTH_SHORT).show();
             } else {
-                targetButton.setVisibility(View.GONE);
+                binding.playerButtonsContainer.removeView(targetButton);
+                playerButtonIds.remove(Integer.valueOf(targetButton.getId()));
                 dialog.dismiss();
             }
         });
@@ -81,6 +113,7 @@ public class FirstFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        playerButtonIds.clear();
     }
 
 }

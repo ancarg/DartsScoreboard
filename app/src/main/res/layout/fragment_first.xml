@@ -22,25 +22,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/button_player_1"
+        <LinearLayout
+            android:id="@+id/player_buttons_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/player_1"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textview_title" />
+            app:layout_constraintTop_toBottomOf="@id/textview_title">
+
+            <Button
+                android:id="@+id/button_player_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/player_1" />
+
+            <Button
+                android:id="@+id/button_player_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/player_2" />
+        </LinearLayout>
 
         <Button
-            android:id="@+id/button_player_2"
+            android:id="@+id/button_add_player"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/player_2"
+            android:text="@string/add_player"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_player_1" />
+            app:layout_constraintTop_toBottomOf="@id/player_buttons_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
