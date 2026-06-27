@@ -17,6 +17,9 @@ import com.example.dartsscoreboard.model.Leg;
 import com.example.dartsscoreboard.model.Match;
 import com.example.dartsscoreboard.model.Player;
 import com.example.dartsscoreboard.model.PlayerLeg;
+import com.example.dartsscoreboard.model.Round;
+import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +71,7 @@ public class SecondFragment extends Fragment {
                     player.setPlayerLegsList(new ArrayList<>());
                     
                     PlayerLeg pl = new PlayerLeg(match.getId(), player.getId(), firstLeg.getId(), legSize);
+                    pl.setRoundsList(new ArrayList<>());
                     player.getPlayerLegsList().add(pl);
                     
                     players.add(player);
@@ -98,6 +102,14 @@ public class SecondFragment extends Fragment {
         PlayerLeg currentPL = getCurrentPlayerLeg(currentPlayer, currentLeg);
         if (currentPL != null) {
             binding.textviewCurrentScore.setText(String.valueOf(currentPL.getCurrentScore()));
+            
+            // Display total score of the last round if exists
+            if (currentPL.getRoundsList() != null && !currentPL.getRoundsList().isEmpty()) {
+                Round lastRound = currentPL.getRoundsList().get(currentPL.getRoundsList().size() - 1);
+                binding.textviewRoundTotalScore.setText(lastRound.getThrowsTotalScore());
+            } else {
+                binding.textviewRoundTotalScore.setText("0");
+            }
         }
     }
 
@@ -112,46 +124,65 @@ public class SecondFragment extends Fragment {
     }
 
     private void handleSubmit() {
-        String throwValueStr = binding.edittextThrow.getText().toString();
-        if (throwValueStr.isEmpty()) {
-            Toast.makeText(getContext(), "Please enter a throw value", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        int throwValue = Integer.parseInt(throwValueStr);
-        int multiplier = 1;
-        
-        int checkedId = binding.toggleGroupThrowType.getCheckedButtonId();
-        if (checkedId == R.id.button_double) {
-            multiplier = 2;
-        } else if (checkedId == R.id.button_triple) {
-            multiplier = 3;
-        }
-
-        int totalScore = throwValue * multiplier;
-        
         Player currentPlayer = crtMatch.getPlayersList().get(currentPlayerIndex);
         PlayerLeg pl = getCurrentPlayerLeg(currentPlayer, currentLeg);
         
-        if (pl != null) {
-            int newScore = pl.getCurrentScore() - totalScore;
-            if (newScore >= 0) {
-                pl.setCurrentScore(newScore);
-                if (newScore == 0) {
-                    Toast.makeText(getContext(), currentPlayer.getDisplayName() + " won the leg!", Toast.LENGTH_LONG).show();
-                    currentPlayer.setWonLegsNo(currentPlayer.getWonLegsNo() + 1);
-                }
-            } else {
-                Toast.makeText(getContext(), "Bust!", Toast.LENGTH_SHORT).show();
+        if (pl == null) return;
+
+        int totalRoundScore = 0;
+        
+        totalRoundScore += getThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
+        totalRoundScore += getThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
+        totalRoundScore += getThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
+
+        // Create a new Round and store the total score
+        Round round = new Round(currentLeg.getId());
+        round.setThrowsTotalScore(String.valueOf(totalRoundScore));
+        if (pl.getRoundsList() == null) pl.setRoundsList(new ArrayList<>());
+        pl.getRoundsList().add(round);
+
+        int newScore = pl.getCurrentScore() - totalRoundScore;
+        if (newScore >= 0) {
+            pl.setCurrentScore(newScore);
+            if (newScore == 0) {
+                Toast.makeText(getContext(), currentPlayer.getDisplayName() + " won the leg!", Toast.LENGTH_LONG).show();
+                currentPlayer.setWonLegsNo(currentPlayer.getWonLegsNo() + 1);
             }
+        } else {
+            Toast.makeText(getContext(), "Bust!", Toast.LENGTH_SHORT).show();
         }
 
-        binding.edittextThrow.setText("");
-        binding.toggleGroupThrowType.clearChecked();
+        clearInputs();
         
         // Move to next player
         currentPlayerIndex = (currentPlayerIndex + 1) % crtMatch.getPlayersList().size();
         updateUI();
+    }
+
+    private int getThrowScore(TextInputEditText editText, MaterialButtonToggleGroup toggleGroup) {
+        String valueStr = editText.getText().toString();
+        if (valueStr.isEmpty()) return 0;
+
+        int value = Integer.parseInt(valueStr);
+        int multiplier = 1;
+        
+        int checkedId = toggleGroup.getCheckedButtonId();
+        if (checkedId == R.id.button_double_1 || checkedId == R.id.button_double_2 || checkedId == R.id.button_double_3) {
+            multiplier = 2;
+        } else if (checkedId == R.id.button_triple_1 || checkedId == R.id.button_triple_2 || checkedId == R.id.button_triple_3) {
+            multiplier = 3;
+        }
+
+        return value * multiplier;
+    }
+
+    private void clearInputs() {
+        binding.edittextThrow1.setText("");
+        binding.edittextThrow2.setText("");
+        binding.edittextThrow3.setText("");
+        binding.toggleGroupThrowType1.clearChecked();
+        binding.toggleGroupThrowType2.clearChecked();
+        binding.toggleGroupThrowType3.clearChecked();
     }
 
     private void createPlayerButtons() {
@@ -159,7 +190,6 @@ public class SecondFragment extends Fragment {
         for (int i = 0; i < crtMatch.getPlayersList().size(); i++) {
             Player player = crtMatch.getPlayersList().get(i);
             
-            // Create button with Material Components style
             Button playerButton = new com.google.android.material.button.MaterialButton(
                     getContext(),
                     null,

@@ -47,8 +47,9 @@
                 app:layout_constraintTop_toBottomOf="@id/textview_player_name"
                 tools:text="501" />
 
+            <!-- Throw 1 -->
             <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/toggle_group_throw_type"
+                android:id="@+id/toggle_group_throw_type_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -57,7 +58,7 @@
                 app:singleSelection="true">
 
                 <Button
-                    android:id="@+id/button_double"
+                    android:id="@+id/button_double_1"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -66,7 +67,7 @@
                     android:text="@string/double_label" />
 
                 <Button
-                    android:id="@+id/button_triple"
+                    android:id="@+id/button_triple_1"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,7 +76,7 @@
                     android:text="@string/triple_label" />
 
                 <Button
-                    android:id="@+id/button_single"
+                    android:id="@+id/button_single_1"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -86,18 +87,134 @@
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_throw"
+                android:id="@+id/layout_throw_1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:hint=""
-                app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type"
+                android:hint="@string/throw_hint"
+                app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type"
-                app:layout_constraintTop_toTopOf="@id/toggle_group_throw_type">
+                app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_1"
+                app:layout_constraintTop_toTopOf="@id/toggle_group_throw_type_1">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edittext_throw"
+                    android:id="@+id/edittext_throw_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Throw 2 -->
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_group_throw_type_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_throw_1"
+                app:singleSelection="true">
+
+                <Button
+                    android:id="@+id/button_double_2"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:paddingHorizontal="8dp"
+                    android:text="@string/double_label" />
+
+                <Button
+                    android:id="@+id/button_triple_2"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:paddingHorizontal="8dp"
+                    android:text="@string/triple_label" />
+
+                <Button
+                    android:id="@+id/button_single_2"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:paddingHorizontal="8dp"
+                    android:text="@string/single_label" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_throw_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:hint="@string/throw_hint"
+                app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_2"
+                app:layout_constraintTop_toTopOf="@id/toggle_group_throw_type_2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edittext_throw_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Throw 3 -->
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_group_throw_type_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_throw_2"
+                app:singleSelection="true">
+
+                <Button
+                    android:id="@+id/button_double_3"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:paddingHorizontal="8dp"
+                    android:text="@string/double_label" />
+
+                <Button
+                    android:id="@+id/button_triple_3"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:paddingHorizontal="8dp"
+                    android:text="@string/triple_label" />
+
+                <Button
+                    android:id="@+id/button_single_3"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:paddingHorizontal="8dp"
+                    android:text="@string/single_label" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_throw_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:hint="@string/throw_hint"
+                app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_3"
+                app:layout_constraintTop_toTopOf="@id/toggle_group_throw_type_3">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edittext_throw_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -106,12 +223,25 @@
 
             <Button
                 android:id="@+id/button_submit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:padding="16dp"
                 android:text="@string/submit"
-                app:layout_constraintTop_toBottomOf="@id/layout_throw" />
+                app:layout_constraintEnd_toEndOf="@id/toggle_group_throw_type_1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_throw_3" />
+
+            <TextView
+                android:id="@+id/textview_round_total_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/button_submit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/button_submit"
+                tools:text="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

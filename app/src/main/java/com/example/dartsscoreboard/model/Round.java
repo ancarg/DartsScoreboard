@@ -6,7 +6,9 @@ public class Round {
     private String id;
     private String legId;
 
-    private ArrayList<Throw> throwsList;
+    private String throwsTotalScore;
+
+    private ArrayList<Throw> throwsList  = new ArrayList<>();
     public Round(String legId) {
         id = "IDR-" + System.currentTimeMillis();
         this.legId = legId;
@@ -18,5 +20,13 @@ public class Round {
 
     public void setThrowsList(ArrayList<Throw> throwsList) {
         this.throwsList = throwsList;
+    }
+
+    public String getThrowsTotalScore() {
+        return throwsTotalScore;
+    }
+
+    public void setThrowsTotalScore(String throwsTotalScore) {
+        this.throwsTotalScore = throwsTotalScore;
     }
 }
