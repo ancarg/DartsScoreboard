@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.dartsscoreboard.databinding.FragmentSecondBinding;
@@ -84,7 +85,13 @@ public class SecondFragment extends Fragment {
 
         Player currentPlayer = crtMatch.getPlayersList().get(currentPlayerIndex);
         
-        binding.textviewLegNo.setText(getString(R.string.leg_label, currentLeg.getDisplayNo()));
+        if (getActivity() instanceof AppCompatActivity) {
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            if (activity.getSupportActionBar() != null) {
+                activity.getSupportActionBar().setTitle(getString(R.string.leg_label, currentLeg.getDisplayNo()));
+            }
+        }
+
         binding.textviewPlayerName.setText(getString(R.string.player_display_name, currentPlayer.getDisplayName()));
         binding.textviewPlayerWins.setText(getString(R.string.wins_label, currentPlayer.getWonLegsNo()));
         
