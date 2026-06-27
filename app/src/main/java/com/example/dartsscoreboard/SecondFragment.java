@@ -54,7 +54,7 @@ public class SecondFragment extends Fragment {
 
             if (playerNames != null) {
                 for (String name : playerNames) {
-                    crtMatch.getPlayersList().add(new Player(crtMatch.getId(), name));
+                   // crtMatch.getPlayersList().add(new Player(crtMatch.getId(), name));
                 }
             }
             return crtMatch;

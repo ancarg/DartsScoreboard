@@ -67,10 +67,18 @@ public class FirstFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s != null && !s.toString().isEmpty()) {
                     try {
-                        defaultFirstTo = Integer.parseInt(s.toString());
+                        int value = Integer.parseInt(s.toString());
+                        if (value > 0) {
+                            defaultFirstTo = value;
+                            binding.layoutFirstTo.setError(null);
+                        } else {
+                            binding.layoutFirstTo.setError(getString(R.string.invalid_first_to));
+                        }
                     } catch (NumberFormatException e) {
-                        // Handle invalid input if necessary
+                        binding.layoutFirstTo.setError(getString(R.string.invalid_first_to));
                     }
+                } else {
+                    binding.layoutFirstTo.setError(getString(R.string.invalid_first_to));
                 }
             }
         });
@@ -97,6 +105,11 @@ public class FirstFragment extends Fragment {
     }
 
     private void startGame() {
+        if (binding.layoutFirstTo.getError() != null) {
+            Toast.makeText(requireContext(), R.string.invalid_first_to, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         List<String> playerNames = new ArrayList<>();
         // Get name from button_player_1 if visible
         if (binding.buttonPlayer1.getVisibility() == View.VISIBLE) {
