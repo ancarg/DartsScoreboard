@@ -23,6 +23,10 @@ public class Player {
         return displayName;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }

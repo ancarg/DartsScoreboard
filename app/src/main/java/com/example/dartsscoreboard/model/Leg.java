@@ -24,6 +24,10 @@ public class Leg {
         return displayNo;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public void setDisplayNo(int displayNo) {
         this.displayNo = displayNo;
     }

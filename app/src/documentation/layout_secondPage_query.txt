@@ -1,0 +1,12 @@
+change the content of the second fragment to match the layout described in layout_secondPage.png. The same styling as in the first page should be used. The page has 2 parts:
+1. the score part
+Leg n - label in which 'n' represents the name of the current leg (class Leg - property displayNo). Should be displayed as the title of the fragment instead of "Second fragment"
+Player w - label where 'w' represents the name of the current player  (class Player - property displayName)
+Wins: n - label where 'n' represents the number of won legs (class Player - property wonLegsNo)
+SCORE - text placeholder for the actual score of a player (class PlayerLeg - property currentScore)
+D|T|X - segmented button with 3 parts labeled D, T, X. None of them are selected by default
+throw - an input where the user will input the value of the throw (integer)
+submit - button
+
+2. the players part
+Player x - Player z -  a dynamic number of buttons based on how many players are in the match named after the players (class Match - property playersList)

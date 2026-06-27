@@ -26,6 +26,14 @@ public class PlayerLeg {
         return currentScore;
     }
 
+    public String getMatchId() {
+        return matchId;
+    }
+
+    public String getLegId() {
+        return legId;
+    }
+
     public void setCurrentScore(int currentScore) {
         this.currentScore = currentScore;
     }
