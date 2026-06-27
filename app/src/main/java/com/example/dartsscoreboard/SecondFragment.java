@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.dartsscoreboard.databinding.FragmentSecondBinding;
+import com.example.dartsscoreboard.model.Leg;
 import com.example.dartsscoreboard.model.Match;
 import com.example.dartsscoreboard.model.Player;
 
@@ -54,14 +55,15 @@ public class SecondFragment extends Fragment {
 
             if (playerNames != null) {
                 for (String name : playerNames) {
-                   // crtMatch.getPlayersList().add(new Player(crtMatch.getId(), name));
+                    crtMatch.getPlayersList().add(new Player(crtMatch.getId(), name));
                 }
             }
+            crtMatch.getLegsList().add(new Leg(crtMatch.getId(), 1));
+
             return crtMatch;
         }
 
         return null ;
-
     }
     private void displayGameSummary() {
         if (getArguments() != null) {

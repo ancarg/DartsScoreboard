@@ -9,9 +9,9 @@ public class Match {
     private int legsNo;
     private int legSize;
 
-    private ArrayList<Player> playersList;
+    private ArrayList<Player> playersList = new ArrayList<>();
 
-    private ArrayList<Leg> legsList;
+    private ArrayList<Leg> legsList = new ArrayList<>();
 
     public Match(int legsNo, int legSize) {
         this.id = "IDM-" + System.currentTimeMillis();
