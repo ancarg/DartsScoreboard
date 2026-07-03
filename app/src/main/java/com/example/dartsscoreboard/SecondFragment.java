@@ -18,6 +18,7 @@ import com.example.dartsscoreboard.model.Match;
 import com.example.dartsscoreboard.model.Player;
 import com.example.dartsscoreboard.model.PlayerLeg;
 import com.example.dartsscoreboard.model.Round;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -46,6 +47,7 @@ public class SecondFragment extends Fragment {
         crtMatch = initAppModel();
         if (crtMatch != null && !crtMatch.getLegsList().isEmpty()) {
             currentLeg = crtMatch.getLegsList().get(0);
+            updateCurrentPlayerState();
             updateUI();
             createPlayerButtons();
         }
@@ -84,6 +86,16 @@ public class SecondFragment extends Fragment {
         return null;
     }
 
+    private void updateCurrentPlayerState() {
+        for (int i = 0; i < crtMatch.getPlayersList().size(); i++) {
+            Player p = crtMatch.getPlayersList().get(i);
+            PlayerLeg pl = getCurrentPlayerLeg(p, currentLeg);
+            if (pl != null) {
+                pl.setCurrentPlayer(i == currentPlayerIndex);
+            }
+        }
+    }
+
     private void updateUI() {
         if (crtMatch == null || currentLeg == null) return;
 
@@ -103,7 +115,6 @@ public class SecondFragment extends Fragment {
         if (currentPL != null) {
             binding.textviewCurrentScore.setText(String.valueOf(currentPL.getCurrentScore()));
             
-            // Display total score of the last round if exists
             if (currentPL.getRoundsList() != null && !currentPL.getRoundsList().isEmpty()) {
                 Round lastRound = currentPL.getRoundsList().get(currentPL.getRoundsList().size() - 1);
                 binding.textviewRoundTotalScore.setText(lastRound.getThrowsTotalScore());
@@ -111,6 +122,9 @@ public class SecondFragment extends Fragment {
                 binding.textviewRoundTotalScore.setText("0");
             }
         }
+        
+        // Refresh player buttons to update icons
+        createPlayerButtons();
     }
 
     private PlayerLeg getCurrentPlayerLeg(Player player, Leg leg) {
@@ -135,7 +149,6 @@ public class SecondFragment extends Fragment {
         totalRoundScore += getThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
         totalRoundScore += getThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
 
-        // Create a new Round and store the total score
         Round round = new Round(currentLeg.getId());
         round.setThrowsTotalScore(String.valueOf(totalRoundScore));
         if (pl.getRoundsList() == null) pl.setRoundsList(new ArrayList<>());
@@ -156,6 +169,7 @@ public class SecondFragment extends Fragment {
         
         // Move to next player
         currentPlayerIndex = (currentPlayerIndex + 1) % crtMatch.getPlayersList().size();
+        updateCurrentPlayerState();
         updateUI();
     }
 
@@ -190,7 +204,7 @@ public class SecondFragment extends Fragment {
         for (int i = 0; i < crtMatch.getPlayersList().size(); i++) {
             Player player = crtMatch.getPlayersList().get(i);
             
-            Button playerButton = new com.google.android.material.button.MaterialButton(
+            MaterialButton playerButton = new MaterialButton(
                     getContext(),
                     null,
                     com.google.android.material.R.attr.materialButtonStyle
@@ -204,9 +218,18 @@ public class SecondFragment extends Fragment {
             playerButton.setLayoutParams(params);
             playerButton.setText(player.getDisplayName());
             
+            PlayerLeg pl = getCurrentPlayerLeg(player, currentLeg);
+            if (pl != null && pl.isCurrentPlayer()) {
+                playerButton.setIconResource(R.drawable.ic_current_player_dart);
+                playerButton.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
+            } else {
+                playerButton.setIcon(null);
+            }
+            
             final int index = i;
             playerButton.setOnClickListener(v -> {
                 currentPlayerIndex = index;
+                updateCurrentPlayerState();
                 updateUI();
             });
             
