@@ -91,7 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:hint="@string/throw_hint"
+                android:hint="@string/throw_hint1"
                 app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_1"
@@ -149,7 +149,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:hint="@string/throw_hint"
+                android:hint="@string/throw_hint2"
                 app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_2"
@@ -207,7 +207,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:hint="@string/throw_hint"
+                android:hint="@string/throw_hint3"
                 app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_3"
@@ -252,12 +252,13 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
         android:elevation="4dp"
+        android:fillViewport="true"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:id="@+id/players_buttons_container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" />
 

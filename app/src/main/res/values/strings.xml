@@ -23,11 +23,17 @@
     <string name="start_game">Start Game</string>
     <string name="invalid_first_to">Must be greater than 0</string>
     <string name="leg_label">Leg %d</string>
-    <string name="player_display_name">Player %s</string>
+    <string name="player_display_name">Player: %s</string>
     <string name="wins_label">Wins: %d</string>
-    <string name="throw_hint">throw</string>
-    <string name="submit">submit</string>
+    <string name="throw_hint1">1st throw</string>
+    <string name="throw_hint2">2nd throw</string>
+    <string name="throw_hint3">3rd throw</string>
+    <string name="submit">Submit</string>
     <string name="double_label">D</string>
     <string name="triple_label">T</string>
     <string name="single_label">X</string>
+    <string name="exit_warning_title">Close Match?</string>
+    <string name="exit_warning_message">Are you sure you want to go back? The current match will be closed.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

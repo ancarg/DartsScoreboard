@@ -2,15 +2,22 @@ package com.example.dartsscoreboard;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.dartsscoreboard.databinding.FragmentSecondBinding;
 import com.example.dartsscoreboard.model.Leg;
@@ -20,6 +27,7 @@ import com.example.dartsscoreboard.model.PlayerLeg;
 import com.example.dartsscoreboard.model.Round;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -33,6 +41,19 @@ public class SecondFragment extends Fragment {
     private Leg currentLeg;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showExitWarningDialog();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
@@ -44,7 +65,7 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        crtMatch = initAppModel();
+        crtMatch = initMatchModel();
         if (crtMatch != null && !crtMatch.getLegsList().isEmpty()) {
             currentLeg = crtMatch.getLegsList().get(0);
             updateCurrentPlayerState();
@@ -53,20 +74,49 @@ public class SecondFragment extends Fragment {
         }
 
         binding.buttonSubmit.setOnClickListener(v -> handleSubmit());
+        
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // No extra menu items needed
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == android.R.id.home) {
+                    showExitWarningDialog();
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
-    private Match initAppModel() {
+    private void showExitWarningDialog() {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.exit_warning_title)
+                .setMessage(R.string.exit_warning_message)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    // Disable callback to avoid infinite loop if navigateUp triggers back
+                    // But navigateUp from SecondFragment to FirstFragment should just work.
+                    // To be safe, we can use a flag or just pop back stack.
+                    NavHostFragment.findNavController(this).popBackStack();
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    private Match initMatchModel() {
         if (getArguments() != null) {
             List<String> playerNames = getArguments().getStringArrayList("playerNames");
             int firstTo = getArguments().getInt("firstTo");
             int legSize = getArguments().getInt("legLength");
 
             Match match = new Match(firstTo * 2 - 1, legSize);
-            ArrayList<Player> players = new ArrayList<>();
-
             Leg firstLeg = new Leg(match.getId(), 1);
             match.getLegsList().add(firstLeg);
 
+            ArrayList<Player> players = new ArrayList<>();
             if (playerNames != null) {
                 for (String name : playerNames) {
                     Player player = new Player(match.getId(), name);
@@ -211,10 +261,11 @@ public class SecondFragment extends Fragment {
             );
             
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    0,
                     LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                    1.0f
             );
-            params.setMargins(8, 0, 8, 0);
+            params.setMargins(4, 0, 4, 0);
             playerButton.setLayoutParams(params);
             playerButton.setText(player.getDisplayName());
             
