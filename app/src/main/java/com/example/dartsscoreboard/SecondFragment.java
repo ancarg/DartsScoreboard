@@ -1,6 +1,8 @@
 package com.example.dartsscoreboard;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,8 +75,8 @@ public class SecondFragment extends Fragment {
             createPlayerButtons();
         }
 
-        //add event handler for submit button
-        binding.buttonSubmit.setOnClickListener(v -> handleSubmit());
+        //add event handlers
+        setupInputListeners();
 
         //handle back action from header button
         requireActivity().addMenuProvider(new MenuProvider() {
@@ -92,6 +94,39 @@ public class SecondFragment extends Fragment {
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    private void setupInputListeners() {
+        TextWatcher throwWatcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calculateAndDisplayTotal();
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        };
+
+        binding.edittextThrow1.addTextChangedListener(throwWatcher);
+        binding.edittextThrow2.addTextChangedListener(throwWatcher);
+        binding.edittextThrow3.addTextChangedListener(throwWatcher);
+
+        MaterialButtonToggleGroup.OnButtonCheckedListener toggleListener = (group, checkedId, isChecked) -> {
+            calculateAndDisplayTotal();
+        };
+
+        binding.toggleGroupThrowType1.addOnButtonCheckedListener(toggleListener);
+        binding.toggleGroupThrowType2.addOnButtonCheckedListener(toggleListener);
+        binding.toggleGroupThrowType3.addOnButtonCheckedListener(toggleListener);
+
+        binding.buttonSubmit.setOnClickListener(v -> handleSubmit());
+    }
+
+    private void calculateAndDisplayTotal() {
+        int total = 0;
+        total += getThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
+        total += getThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
+        total += getThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
+        
+        binding.textviewRoundTotalScore.setText(String.valueOf(total));
     }
 
     //back confirmation message
@@ -238,6 +273,8 @@ public class SecondFragment extends Fragment {
             multiplier = 2;
         } else if (checkedId == R.id.button_triple_1 || checkedId == R.id.button_triple_2 || checkedId == R.id.button_triple_3) {
             multiplier = 3;
+        } else if (checkedId == R.id.button_strike_1 || checkedId == R.id.button_strike_2 || checkedId == R.id.button_strike_3) {
+            multiplier = 0;
         }
 
         return value * multiplier;
@@ -250,6 +287,7 @@ public class SecondFragment extends Fragment {
         binding.toggleGroupThrowType1.clearChecked();
         binding.toggleGroupThrowType2.clearChecked();
         binding.toggleGroupThrowType3.clearChecked();
+        binding.textviewRoundTotalScore.setText("0");
     }
 
     private void createPlayerButtons() {
