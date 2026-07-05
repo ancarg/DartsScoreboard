@@ -76,7 +76,7 @@
                     android:text="@string/triple_label" />
 
                 <Button
-                    android:id="@+id/button_single_1"
+                    android:id="@+id/button_strike_1"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
                     android:text="@string/triple_label" />
 
                 <Button
-                    android:id="@+id/button_single_2"
+                    android:id="@+id/button_strike_2"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
                     android:text="@string/triple_label" />
 
                 <Button
-                    android:id="@+id/button_single_3"
+                    android:id="@+id/button_strike_3"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

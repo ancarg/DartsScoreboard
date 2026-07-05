@@ -36,7 +36,7 @@ import java.util.List;
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
-    private Match crtMatch;
+    private Match currentMatch;
     private int currentPlayerIndex = 0;
     private Leg currentLeg;
 
@@ -65,16 +65,18 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        crtMatch = initMatchModel();
-        if (crtMatch != null && !crtMatch.getLegsList().isEmpty()) {
-            currentLeg = crtMatch.getLegsList().get(0);
+        currentMatch = initMatchModel();
+        if (currentMatch != null && !currentMatch.getLegsList().isEmpty()) {
+            currentLeg = currentMatch.getLegsList().get(0);
             updateCurrentPlayerState();
             updateUI();
             createPlayerButtons();
         }
 
+        //add event handler for submit button
         binding.buttonSubmit.setOnClickListener(v -> handleSubmit());
-        
+
+        //handle back action from header button
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
@@ -92,14 +94,12 @@ public class SecondFragment extends Fragment {
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
+    //back confirmation message
     private void showExitWarningDialog() {
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.exit_warning_title)
                 .setMessage(R.string.exit_warning_message)
                 .setPositiveButton(R.string.yes, (dialog, which) -> {
-                    // Disable callback to avoid infinite loop if navigateUp triggers back
-                    // But navigateUp from SecondFragment to FirstFragment should just work.
-                    // To be safe, we can use a flag or just pop back stack.
                     NavHostFragment.findNavController(this).popBackStack();
                 })
                 .setNegativeButton(R.string.no, null)
@@ -136,9 +136,46 @@ public class SecondFragment extends Fragment {
         return null;
     }
 
+    private void handleSubmit() {
+        Player currentPlayer = currentMatch.getPlayersList().get(currentPlayerIndex);
+        PlayerLeg pl = getCurrentPlayerLeg(currentPlayer, currentLeg);
+
+        if (pl == null) return;
+
+        int totalRoundScore = 0;
+
+        totalRoundScore += getThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
+        totalRoundScore += getThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
+        totalRoundScore += getThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
+
+        Round round = new Round(currentLeg.getId());
+        round.setThrowsTotalScore(String.valueOf(totalRoundScore));
+        if (pl.getRoundsList() == null) pl.setRoundsList(new ArrayList<>());
+        pl.getRoundsList().add(round);
+
+        int newScore = pl.getCurrentScore() - totalRoundScore;
+        if (newScore >= 0) {
+            pl.setCurrentScore(newScore);
+            if (newScore == 0) {
+                Toast.makeText(getContext(), currentPlayer.getDisplayName() + " won the leg!", Toast.LENGTH_LONG).show();
+                currentPlayer.setWonLegsNo(currentPlayer.getWonLegsNo() + 1);
+            }
+        } else {
+            Toast.makeText(getContext(), "Bust!", Toast.LENGTH_SHORT).show();
+        }
+
+        clearInputs();
+
+        // Move to next player
+        currentPlayerIndex = (currentPlayerIndex + 1) % currentMatch.getPlayersList().size();
+        updateCurrentPlayerState();
+        updateUI();
+    }
+
+    //----------------------------------------------------------------------
     private void updateCurrentPlayerState() {
-        for (int i = 0; i < crtMatch.getPlayersList().size(); i++) {
-            Player p = crtMatch.getPlayersList().get(i);
+        for (int i = 0; i < currentMatch.getPlayersList().size(); i++) {
+            Player p = currentMatch.getPlayersList().get(i);
             PlayerLeg pl = getCurrentPlayerLeg(p, currentLeg);
             if (pl != null) {
                 pl.setCurrentPlayer(i == currentPlayerIndex);
@@ -147,9 +184,9 @@ public class SecondFragment extends Fragment {
     }
 
     private void updateUI() {
-        if (crtMatch == null || currentLeg == null) return;
+        if (currentMatch == null || currentLeg == null) return;
 
-        Player currentPlayer = crtMatch.getPlayersList().get(currentPlayerIndex);
+        Player currentPlayer = currentMatch.getPlayersList().get(currentPlayerIndex);
         
         if (getActivity() instanceof AppCompatActivity) {
             AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -187,41 +224,7 @@ public class SecondFragment extends Fragment {
         return null;
     }
 
-    private void handleSubmit() {
-        Player currentPlayer = crtMatch.getPlayersList().get(currentPlayerIndex);
-        PlayerLeg pl = getCurrentPlayerLeg(currentPlayer, currentLeg);
-        
-        if (pl == null) return;
 
-        int totalRoundScore = 0;
-        
-        totalRoundScore += getThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
-        totalRoundScore += getThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
-        totalRoundScore += getThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
-
-        Round round = new Round(currentLeg.getId());
-        round.setThrowsTotalScore(String.valueOf(totalRoundScore));
-        if (pl.getRoundsList() == null) pl.setRoundsList(new ArrayList<>());
-        pl.getRoundsList().add(round);
-
-        int newScore = pl.getCurrentScore() - totalRoundScore;
-        if (newScore >= 0) {
-            pl.setCurrentScore(newScore);
-            if (newScore == 0) {
-                Toast.makeText(getContext(), currentPlayer.getDisplayName() + " won the leg!", Toast.LENGTH_LONG).show();
-                currentPlayer.setWonLegsNo(currentPlayer.getWonLegsNo() + 1);
-            }
-        } else {
-            Toast.makeText(getContext(), "Bust!", Toast.LENGTH_SHORT).show();
-        }
-
-        clearInputs();
-        
-        // Move to next player
-        currentPlayerIndex = (currentPlayerIndex + 1) % crtMatch.getPlayersList().size();
-        updateCurrentPlayerState();
-        updateUI();
-    }
 
     private int getThrowScore(TextInputEditText editText, MaterialButtonToggleGroup toggleGroup) {
         String valueStr = editText.getText().toString();
@@ -251,8 +254,8 @@ public class SecondFragment extends Fragment {
 
     private void createPlayerButtons() {
         binding.playersButtonsContainer.removeAllViews();
-        for (int i = 0; i < crtMatch.getPlayersList().size(); i++) {
-            Player player = crtMatch.getPlayersList().get(i);
+        for (int i = 0; i < currentMatch.getPlayersList().size(); i++) {
+            Player player = currentMatch.getPlayersList().get(i);
             
             MaterialButton playerButton = new MaterialButton(
                     getContext(),
