@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/player_name_hint"
         android:inputType="textPersonName"
-        android:maxLength="9" />
+        android:maxLength="12" />
 
     <Button
         android:id="@+id/button_remove_player"
