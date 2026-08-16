@@ -362,6 +362,10 @@ public class SecondFragment extends Fragment {
         boolean isCurrentTurn = (selectedPlayerIndex == actualTurnPlayerIndex);
         setInputsEnabled(isCurrentTurn);
         
+        if (isCurrentTurn) {
+            binding.edittextThrow1.requestFocus();
+        }
+        
         // Refresh player buttons to update icons
         createPlayerButtons();
     }
@@ -444,6 +448,7 @@ public class SecondFragment extends Fragment {
             if (pl != null) {
                 buttonText += " (" + pl.getCurrentScore() + ")";
             }
+            buttonText += " [" + player.getWonLegsNo() + "]";
             playerButton.setText(buttonText);
 
             if (pl != null && pl.isCurrentPlayer()) {
