@@ -39,7 +39,8 @@ public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
     private Match currentMatch;
-    private int currentPlayerIndex = 0;
+    private int selectedPlayerIndex = 0;
+    private int actualTurnPlayerIndex = 0;
     private Leg currentLeg;
 
     @Override
@@ -237,7 +238,7 @@ public class SecondFragment extends Fragment {
             return;
         }
 
-        Player currentPlayer = currentMatch.getPlayersList().get(currentPlayerIndex);
+        Player currentPlayer = currentMatch.getPlayersList().get(actualTurnPlayerIndex);
         PlayerLeg pl = getCurrentPlayerLeg(currentPlayer, currentLeg);
 
         if (pl == null) return;
@@ -267,7 +268,8 @@ public class SecondFragment extends Fragment {
         clearInputs();
 
         // Move to next player
-        currentPlayerIndex = (currentPlayerIndex + 1) % currentMatch.getPlayersList().size();
+        actualTurnPlayerIndex = (actualTurnPlayerIndex + 1) % currentMatch.getPlayersList().size();
+        selectedPlayerIndex = actualTurnPlayerIndex;
         updateCurrentPlayerState();
         updateUI();
     }
@@ -278,7 +280,7 @@ public class SecondFragment extends Fragment {
             Player p = currentMatch.getPlayersList().get(i);
             PlayerLeg pl = getCurrentPlayerLeg(p, currentLeg);
             if (pl != null) {
-                pl.setCurrentPlayer(i == currentPlayerIndex);
+                pl.setCurrentPlayer(i == actualTurnPlayerIndex);
             }
         }
     }
@@ -286,7 +288,7 @@ public class SecondFragment extends Fragment {
     private void updateUI() {
         if (currentMatch == null || currentLeg == null) return;
 
-        Player currentPlayer = currentMatch.getPlayersList().get(currentPlayerIndex);
+        Player selectedPlayer = currentMatch.getPlayersList().get(selectedPlayerIndex);
         
         if (getActivity() instanceof AppCompatActivity) {
             AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -295,19 +297,33 @@ public class SecondFragment extends Fragment {
             }
         }
 
-        binding.textviewPlayerName.setText(getString(R.string.player_display_name, currentPlayer.getDisplayName()));
-        binding.textviewPlayerWins.setText(getString(R.string.wins_label, currentPlayer.getWonLegsNo()));
+        binding.textviewPlayerName.setText(getString(R.string.player_display_name, selectedPlayer.getDisplayName()));
+        binding.textviewPlayerWins.setText(getString(R.string.wins_label, selectedPlayer.getWonLegsNo()));
         
-        PlayerLeg currentPL = getCurrentPlayerLeg(currentPlayer, currentLeg);
-        if (currentPL != null) {
-            binding.textviewCurrentScore.setText(String.valueOf(currentPL.getCurrentScore()));
+        PlayerLeg selectedPL = getCurrentPlayerLeg(selectedPlayer, currentLeg);
+        if (selectedPL != null) {
+            binding.textviewCurrentScore.setText(String.valueOf(selectedPL.getCurrentScore()));
         }
         
         // Reset round total score display for the current user's new turn
         binding.textviewRoundTotalScore.setText("0");
         
+        // Enable/Disable inputs based on whether the selected player is the one whose turn it is
+        boolean isCurrentTurn = (selectedPlayerIndex == actualTurnPlayerIndex);
+        setInputsEnabled(isCurrentTurn);
+        
         // Refresh player buttons to update icons
         createPlayerButtons();
+    }
+
+    private void setInputsEnabled(boolean enabled) {
+        binding.edittextThrow1.setEnabled(enabled);
+        binding.edittextThrow2.setEnabled(enabled);
+        binding.edittextThrow3.setEnabled(enabled);
+        binding.toggleGroupThrowType1.setEnabled(enabled);
+        binding.toggleGroupThrowType2.setEnabled(enabled);
+        binding.toggleGroupThrowType3.setEnabled(enabled);
+        binding.buttonSubmit.setEnabled(enabled);
     }
 
     private PlayerLeg getCurrentPlayerLeg(Player player, Leg leg) {
@@ -371,8 +387,7 @@ public class SecondFragment extends Fragment {
             
             final int index = i;
             playerButton.setOnClickListener(v -> {
-                currentPlayerIndex = index;
-                updateCurrentPlayerState();
+                selectedPlayerIndex = index;
                 updateUI();
             });
             
