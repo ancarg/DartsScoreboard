@@ -317,8 +317,8 @@ public class SecondFragment extends Fragment {
             player.getPlayerLegsList().add(pl);
         }
 
-        actualTurnPlayerIndex = 0;
-        selectedPlayerIndex = 0;
+        actualTurnPlayerIndex = (nextLegNo - 1) % currentMatch.getPlayersList().size();
+        selectedPlayerIndex = actualTurnPlayerIndex;
         clearInputs();
         updateCurrentPlayerState();
         updateUI();
@@ -444,11 +444,17 @@ public class SecondFragment extends Fragment {
             playerButton.setLayoutParams(params);
 
             PlayerLeg pl = getCurrentPlayerLeg(player, currentLeg);
-            String buttonText = player.getDisplayName();
-            if (pl != null) {
-                buttonText += " (" + pl.getCurrentScore() + ")";
+            String name = player.getDisplayName();
+            int score = (pl != null) ? pl.getCurrentScore() : currentMatch.getLegSize();
+            int wins = player.getWonLegsNo();
+            
+            String buttonText = name + "\n" + score + " [" + wins + "]";
+            
+            int startingPlayerIndex = (currentLeg.getDisplayNo() - 1) % players.size();
+            if (i == startingPlayerIndex) {
+                buttonText += " [*]";
             }
-            buttonText += " [" + player.getWonLegsNo() + "]";
+
             playerButton.setText(buttonText);
 
             if (pl != null && pl.isCurrentPlayer()) {
