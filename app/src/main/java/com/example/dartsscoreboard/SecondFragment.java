@@ -301,14 +301,10 @@ public class SecondFragment extends Fragment {
         PlayerLeg currentPL = getCurrentPlayerLeg(currentPlayer, currentLeg);
         if (currentPL != null) {
             binding.textviewCurrentScore.setText(String.valueOf(currentPL.getCurrentScore()));
-            
-            if (currentPL.getRoundsList() != null && !currentPL.getRoundsList().isEmpty()) {
-                Round lastRound = currentPL.getRoundsList().get(currentPL.getRoundsList().size() - 1);
-                binding.textviewRoundTotalScore.setText(lastRound.getThrowsTotalScore());
-            } else {
-                binding.textviewRoundTotalScore.setText("0");
-            }
         }
+        
+        // Reset round total score display for the current user's new turn
+        binding.textviewRoundTotalScore.setText("0");
         
         // Refresh player buttons to update icons
         createPlayerButtons();
