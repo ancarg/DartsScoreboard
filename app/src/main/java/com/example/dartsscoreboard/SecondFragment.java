@@ -354,23 +354,36 @@ public class SecondFragment extends Fragment {
 
     private void createPlayerButtons() {
         binding.playersButtonsContainer.removeAllViews();
-        for (int i = 0; i < currentMatch.getPlayersList().size(); i++) {
-            Player player = currentMatch.getPlayersList().get(i);
-            
+        List<Player> players = currentMatch.getPlayersList();
+        LinearLayout currentRow = null;
+
+        for (int i = 0; i < players.size(); i++) {
+            if (i % 2 == 0) {
+                currentRow = new LinearLayout(getContext());
+                currentRow.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                currentRow.setLayoutParams(rowParams);
+                binding.playersButtonsContainer.addView(currentRow);
+            }
+
+            Player player = players.get(i);
             MaterialButton playerButton = new MaterialButton(
                     getContext(),
                     null,
                     com.google.android.material.R.attr.materialButtonStyle
             );
-            
+
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     0,
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     1.0f
             );
-            params.setMargins(4, 0, 4, 0);
+            params.setMargins(4, 4, 4, 4);
             playerButton.setLayoutParams(params);
-            
+
             PlayerLeg pl = getCurrentPlayerLeg(player, currentLeg);
             String buttonText = player.getDisplayName();
             if (pl != null) {
@@ -384,14 +397,16 @@ public class SecondFragment extends Fragment {
             } else {
                 playerButton.setIcon(null);
             }
-            
+
             final int index = i;
             playerButton.setOnClickListener(v -> {
                 selectedPlayerIndex = index;
                 updateUI();
             });
-            
-            binding.playersButtonsContainer.addView(playerButton);
+
+            if (currentRow != null) {
+                currentRow.addView(playerButton);
+            }
         }
     }
 
