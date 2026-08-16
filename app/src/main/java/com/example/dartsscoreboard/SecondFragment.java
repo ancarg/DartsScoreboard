@@ -100,6 +100,7 @@ public class SecondFragment extends Fragment {
         TextWatcher throwWatcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateThrows();
                 calculateAndDisplayTotal();
             }
             @Override public void afterTextChanged(Editable s) {}
@@ -110,6 +111,15 @@ public class SecondFragment extends Fragment {
         binding.edittextThrow3.addTextChangedListener(throwWatcher);
 
         MaterialButtonToggleGroup.OnButtonCheckedListener toggleListener = (group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == R.id.button_strike_1) {
+                    binding.edittextThrow1.setText("0");
+                } else if (checkedId == R.id.button_strike_2) {
+                    binding.edittextThrow2.setText("0");
+                } else if (checkedId == R.id.button_strike_3) {
+                    binding.edittextThrow3.setText("0");
+                }
+            }
             calculateAndDisplayTotal();
         };
 
@@ -122,11 +132,61 @@ public class SecondFragment extends Fragment {
 
     private void calculateAndDisplayTotal() {
         int total = 0;
-        total += getThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
-        total += getThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
-        total += getThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
+        total += getValidatedThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
+        total += getValidatedThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
+        total += getValidatedThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
         
         binding.textviewRoundTotalScore.setText(String.valueOf(total));
+    }
+
+    private int getValidatedThrowScore(TextInputEditText editText, MaterialButtonToggleGroup toggleGroup) {
+        String valueStr = editText.getText().toString();
+        if (valueStr.isEmpty()) return 0;
+        try {
+            int value = Integer.parseInt(valueStr);
+            if (value > 20) return 0;
+            
+            int multiplier = 1;
+            int checkedId = toggleGroup.getCheckedButtonId();
+            if (checkedId == R.id.button_double_1 || checkedId == R.id.button_double_2 || checkedId == R.id.button_double_3) {
+                multiplier = 2;
+            } else if (checkedId == R.id.button_triple_1 || checkedId == R.id.button_triple_2 || checkedId == R.id.button_triple_3) {
+                multiplier = 3;
+            } else if (checkedId == R.id.button_strike_1 || checkedId == R.id.button_strike_2 || checkedId == R.id.button_strike_3) {
+                multiplier = 0;
+            }
+            return value * multiplier;
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    private boolean validateThrows() {
+        boolean isValid = true;
+        isValid &= validateSingleThrow(binding.edittextThrow1, binding.layoutThrow1);
+        isValid &= validateSingleThrow(binding.edittextThrow2, binding.layoutThrow2);
+        isValid &= validateSingleThrow(binding.edittextThrow3, binding.layoutThrow3);
+        return isValid;
+    }
+
+    private boolean validateSingleThrow(TextInputEditText editText, com.google.android.material.textfield.TextInputLayout layout) {
+        String val = editText.getText().toString();
+        if (val.isEmpty()) {
+            layout.setError(null);
+            return true;
+        }
+        try {
+            int score = Integer.parseInt(val);
+            if (score > 20) {
+                layout.setError("Max 20");
+                return false;
+            }
+            layout.setError(null);
+            return true;
+        } catch (NumberFormatException e) {
+            layout.setError("Invalid");
+            return false;
+        }
     }
 
     //back confirmation message
@@ -172,6 +232,11 @@ public class SecondFragment extends Fragment {
     }
 
     private void handleSubmit() {
+        if (!validateThrows()) {
+            Toast.makeText(getContext(), "Please fix errors", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Player currentPlayer = currentMatch.getPlayersList().get(currentPlayerIndex);
         PlayerLeg pl = getCurrentPlayerLeg(currentPlayer, currentLeg);
 
@@ -179,9 +244,9 @@ public class SecondFragment extends Fragment {
 
         int totalRoundScore = 0;
 
-        totalRoundScore += getThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
-        totalRoundScore += getThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
-        totalRoundScore += getThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
+        totalRoundScore += getValidatedThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
+        totalRoundScore += getValidatedThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
+        totalRoundScore += getValidatedThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
 
         Round round = new Round(currentLeg.getId());
         round.setThrowsTotalScore(String.valueOf(totalRoundScore));
@@ -261,25 +326,6 @@ public class SecondFragment extends Fragment {
 
 
 
-    private int getThrowScore(TextInputEditText editText, MaterialButtonToggleGroup toggleGroup) {
-        String valueStr = editText.getText().toString();
-        if (valueStr.isEmpty()) return 0;
-
-        int value = Integer.parseInt(valueStr);
-        int multiplier = 1;
-        
-        int checkedId = toggleGroup.getCheckedButtonId();
-        if (checkedId == R.id.button_double_1 || checkedId == R.id.button_double_2 || checkedId == R.id.button_double_3) {
-            multiplier = 2;
-        } else if (checkedId == R.id.button_triple_1 || checkedId == R.id.button_triple_2 || checkedId == R.id.button_triple_3) {
-            multiplier = 3;
-        } else if (checkedId == R.id.button_strike_1 || checkedId == R.id.button_strike_2 || checkedId == R.id.button_strike_3) {
-            multiplier = 0;
-        }
-
-        return value * multiplier;
-    }
-
     private void clearInputs() {
         binding.edittextThrow1.setText("");
         binding.edittextThrow2.setText("");
@@ -288,6 +334,10 @@ public class SecondFragment extends Fragment {
         binding.toggleGroupThrowType2.clearChecked();
         binding.toggleGroupThrowType3.clearChecked();
         binding.textviewRoundTotalScore.setText("0");
+        
+        binding.layoutThrow1.setError(null);
+        binding.layoutThrow2.setError(null);
+        binding.layoutThrow3.setError(null);
     }
 
     private void createPlayerButtons() {
@@ -308,9 +358,14 @@ public class SecondFragment extends Fragment {
             );
             params.setMargins(4, 0, 4, 0);
             playerButton.setLayoutParams(params);
-            playerButton.setText(player.getDisplayName());
             
             PlayerLeg pl = getCurrentPlayerLeg(player, currentLeg);
+            String buttonText = player.getDisplayName();
+            if (pl != null) {
+                buttonText += " (" + pl.getCurrentScore() + ")";
+            }
+            playerButton.setText(buttonText);
+
             if (pl != null && pl.isCurrentPlayer()) {
                 playerButton.setIconResource(R.drawable.ic_current_player_dart);
                 playerButton.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
