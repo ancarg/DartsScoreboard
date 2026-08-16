@@ -260,6 +260,8 @@ public class SecondFragment extends Fragment {
             if (newScore == 0) {
                 Toast.makeText(getContext(), currentPlayer.getDisplayName() + " won the leg!", Toast.LENGTH_LONG).show();
                 currentPlayer.setWonLegsNo(currentPlayer.getWonLegsNo() + 1);
+                startNewLeg();
+                return; // startNewLeg handles UI refresh and player resets
             }
         } else {
             Toast.makeText(getContext(), "Bust!", Toast.LENGTH_SHORT).show();
@@ -270,6 +272,24 @@ public class SecondFragment extends Fragment {
         // Move to next player
         actualTurnPlayerIndex = (actualTurnPlayerIndex + 1) % currentMatch.getPlayersList().size();
         selectedPlayerIndex = actualTurnPlayerIndex;
+        updateCurrentPlayerState();
+        updateUI();
+    }
+
+    private void startNewLeg() {
+        int nextLegNo = currentMatch.getLegsList().size() + 1;
+        currentLeg = new Leg(currentMatch.getId(), nextLegNo);
+        currentMatch.getLegsList().add(currentLeg);
+
+        for (Player player : currentMatch.getPlayersList()) {
+            PlayerLeg pl = new PlayerLeg(currentMatch.getId(), player.getId(), currentLeg.getId(), currentMatch.getLegSize());
+            pl.setRoundsList(new ArrayList<>());
+            player.getPlayerLegsList().add(pl);
+        }
+
+        actualTurnPlayerIndex = 0;
+        selectedPlayerIndex = 0;
+        clearInputs();
         updateCurrentPlayerState();
         updateUI();
     }
