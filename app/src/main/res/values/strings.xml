@@ -36,4 +36,5 @@
     <string name="exit_warning_message">Are you sure you want to go back? The current match will be closed.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="throws_remaining">The player still has throws left</string>
 </resources>

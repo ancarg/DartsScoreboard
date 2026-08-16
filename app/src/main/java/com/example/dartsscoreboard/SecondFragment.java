@@ -112,13 +112,32 @@ public class SecondFragment extends Fragment {
         binding.edittextThrow3.addTextChangedListener(throwWatcher);
 
         MaterialButtonToggleGroup.OnButtonCheckedListener toggleListener = (group, checkedId, isChecked) -> {
-            if (isChecked) {
+            boolean isCurrentTurn = (selectedPlayerIndex == actualTurnPlayerIndex);
+            if (isCurrentTurn) {
                 if (checkedId == R.id.button_strike_1) {
-                    binding.edittextThrow1.setText("0");
+                    if (isChecked) {
+                        binding.edittextThrow1.setText("0");
+                        binding.edittextThrow1.setEnabled(false);
+                    } else {
+                        binding.edittextThrow1.setText("");
+                        binding.edittextThrow1.setEnabled(true);
+                    }
                 } else if (checkedId == R.id.button_strike_2) {
-                    binding.edittextThrow2.setText("0");
+                    if (isChecked) {
+                        binding.edittextThrow2.setText("0");
+                        binding.edittextThrow2.setEnabled(false);
+                    } else {
+                        binding.edittextThrow2.setText("");
+                        binding.edittextThrow2.setEnabled(true);
+                    }
                 } else if (checkedId == R.id.button_strike_3) {
-                    binding.edittextThrow3.setText("0");
+                    if (isChecked) {
+                        binding.edittextThrow3.setText("0");
+                        binding.edittextThrow3.setEnabled(false);
+                    } else {
+                        binding.edittextThrow3.setText("");
+                        binding.edittextThrow3.setEnabled(true);
+                    }
                 }
             }
             calculateAndDisplayTotal();
@@ -232,7 +251,18 @@ public class SecondFragment extends Fragment {
         return null;
     }
 
+    private boolean isAnyThrowEmpty() {
+        return binding.edittextThrow1.getText().toString().trim().isEmpty() ||
+                binding.edittextThrow2.getText().toString().trim().isEmpty() ||
+                binding.edittextThrow3.getText().toString().trim().isEmpty();
+    }
+
     private void handleSubmit() {
+        if (isAnyThrowEmpty()) {
+            Toast.makeText(getContext(), R.string.throws_remaining, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!validateThrows()) {
             Toast.makeText(getContext(), "Please fix errors", Toast.LENGTH_SHORT).show();
             return;
@@ -337,9 +367,10 @@ public class SecondFragment extends Fragment {
     }
 
     private void setInputsEnabled(boolean enabled) {
-        binding.edittextThrow1.setEnabled(enabled);
-        binding.edittextThrow2.setEnabled(enabled);
-        binding.edittextThrow3.setEnabled(enabled);
+        binding.edittextThrow1.setEnabled(enabled && binding.toggleGroupThrowType1.getCheckedButtonId() != R.id.button_strike_1);
+        binding.edittextThrow2.setEnabled(enabled && binding.toggleGroupThrowType2.getCheckedButtonId() != R.id.button_strike_2);
+        binding.edittextThrow3.setEnabled(enabled && binding.toggleGroupThrowType3.getCheckedButtonId() != R.id.button_strike_3);
+        
         binding.toggleGroupThrowType1.setEnabled(enabled);
         binding.toggleGroupThrowType2.setEnabled(enabled);
         binding.toggleGroupThrowType3.setEnabled(enabled);
@@ -359,6 +390,10 @@ public class SecondFragment extends Fragment {
 
 
     private void clearInputs() {
+        binding.edittextThrow1.setEnabled(true);
+        binding.edittextThrow2.setEnabled(true);
+        binding.edittextThrow3.setEnabled(true);
+
         binding.edittextThrow1.setText("");
         binding.edittextThrow2.setText("");
         binding.edittextThrow3.setText("");
