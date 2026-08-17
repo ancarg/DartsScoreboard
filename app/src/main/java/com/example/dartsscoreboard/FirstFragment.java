@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.dartsscoreboard.databinding.FragmentFirstBinding;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -84,6 +85,9 @@ public class FirstFragment extends Fragment {
         });
 
         setupLegLengthDropdown();
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
 
         binding.buttonStart.setOnClickListener(v -> startGame());
     }

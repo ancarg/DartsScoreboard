@@ -27,6 +27,7 @@ import com.example.dartsscoreboard.model.Match;
 import com.example.dartsscoreboard.model.Player;
 import com.example.dartsscoreboard.model.PlayerLeg;
 import com.example.dartsscoreboard.model.Round;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -78,6 +79,9 @@ public class SecondFragment extends Fragment {
 
         //add event handlers
         setupInputListeners();
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
 
         //handle back action from header button
         requireActivity().addMenuProvider(new MenuProvider() {

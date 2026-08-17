@@ -16,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.dartsscoreboard.databinding.ActivityMainBinding;
+import com.google.android.gms.ads.MobileAds;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        MobileAds.initialize(this, initializationStatus -> {});
 
         setSupportActionBar(binding.toolbar);
 
