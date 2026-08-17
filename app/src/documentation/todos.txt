@@ -7,7 +7,14 @@
 
 2. closing this page takes you to the initial page of the application
 3. build an apk and install it
-4. advertisement banner at the bottom of the page
 5 cleanup state on closing the match
 6. what happens when put in background/when it comes back
 7. db persistence in the future maybe
+
+
+-------------advertisement banner at the bottom of the page
+What you need to do for Google Play
+Before you publish to Google Play with ads, you must:
+1.Create an AdMob Account: You need to register your app there to get a unique "Ad Unit ID."
+2.Declare Ads: In the Google Play Console, you must check a box stating "My app contains ads." This adds the "Contains Ads" label to your store listing.
+3.Privacy Policy: Because ads track user data (like device IDs), you are legally required to have a Privacy Policy link in your app and on your store listing.

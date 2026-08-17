@@ -80,8 +80,8 @@ public class SecondFragment extends Fragment {
         //add event handlers
         setupInputListeners();
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        binding.adView.loadAd(adRequest);
+        // AdRequest adRequest = new AdRequest.Builder().build();
+        // binding.adView.loadAd(adRequest);
 
         //handle back action from header button
         requireActivity().addMenuProvider(new MenuProvider() {

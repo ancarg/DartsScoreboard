@@ -86,8 +86,8 @@ public class FirstFragment extends Fragment {
 
         setupLegLengthDropdown();
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        binding.adView.loadAd(adRequest);
+        // AdRequest adRequest = new AdRequest.Builder().build();
+        // binding.adView.loadAd(adRequest);
 
         binding.buttonStart.setOnClickListener(v -> startGame());
     }
