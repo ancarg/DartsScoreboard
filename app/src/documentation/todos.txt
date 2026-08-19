@@ -10,6 +10,8 @@
 5 cleanup state on closing the match
 6. what happens when put in background/when it comes back
 7. db persistence in the future maybe
+0. create an icon for the homepage app
+0. improve design of the players score section - colors/theme
 
 
 -------------advertisement banner at the bottom of the page

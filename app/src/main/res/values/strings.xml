@@ -42,4 +42,7 @@
     <string name="sets_label">Sets</string>
     <string name="legs_label_table">Legs</string>
     <string name="score_label">Score</string>
+    <string name="congratulations_format">Congratulations %s!</string>
+    <string name="close">Close</string>
+    <string name="winner_fragment_label">Winner</string>
 </resources>

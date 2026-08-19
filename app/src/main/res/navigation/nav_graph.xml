@@ -24,5 +24,15 @@
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_SecondFragment_to_WinnerFragment"
+            app:destination="@id/WinnerFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/WinnerFragment"
+        android:name="com.example.dartsscoreboard.WinnerFragment"
+        android:label="@string/winner_fragment_label"
+        tools:layout="@layout/fragment_winner" />
 </navigation>

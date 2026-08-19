@@ -330,14 +330,26 @@ public class SecondFragment extends Fragment {
 
         if (winnerLegsCount >= currentMatch.getLegsNo()) {
             // Player won the set
+            Player setWinner = null;
             for (Player p : currentMatch.getPlayersList()) {
                 if (p.getId().equals(lastWinnerId)) {
                     p.setWonSetsNo(p.getWonSetsNo() + 1);
+                    setWinner = p;
                     Toast.makeText(getContext(), p.getDisplayName() + " won the set!", Toast.LENGTH_LONG).show();
                 }
                 // Reset legs won in the set for all players
                 p.setWonLegsNo(0);
             }
+
+            // Check if player won the match
+            if (setWinner != null && setWinner.getWonSetsNo() >= currentMatch.getSetsNo()) {
+                Bundle bundle = new Bundle();
+                bundle.putString("winnerName", setWinner.getDisplayName());
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_SecondFragment_to_WinnerFragment, bundle);
+                return;
+            }
+
             // Start new set
             int nextSetNo = currentMatch.getSetsList().size() + 1;
             currentSet = new Set(currentMatch.getId(), nextSetNo);
