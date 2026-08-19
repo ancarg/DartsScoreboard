@@ -9,7 +9,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/players_buttons_panel"
+        app:layout_constraintBottom_toTopOf="@id/players_table_panel"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -246,23 +246,56 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <LinearLayout
-        android:id="@+id/players_buttons_panel"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/players_table_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        android:elevation="4dp"
-        android:orientation="vertical"
-        android:padding="8dp"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <LinearLayout
-            android:id="@+id/players_buttons_container"
+        <TableLayout
+            android:id="@+id/table_players_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:padding="8dp"
+            android:stretchColumns="0,1,2,3">
 
-    </LinearLayout>
+            <TableRow
+                android:id="@+id/table_header"
+                android:background="?attr/colorSecondaryContainer">
+                <TextView
+                    android:id="@+id/header_player"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:textStyle="bold"
+                    tools:text="First to 5" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/sets_label"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/legs_label_table"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/score_label"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+            </TableRow>
+        </TableLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <!--
     <com.google.android.gms.ads.AdView

@@ -39,4 +39,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="throws_remaining">The player still has throws left</string>
+    <string name="first_to_sets_label">First to %d</string>
+    <string name="sets_label">Sets</string>
+    <string name="legs_label_table">Legs</string>
+    <string name="score_label">Score</string>
 </resources>

@@ -1,15 +1,18 @@
 package com.example.dartsscoreboard;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -77,7 +80,6 @@ public class SecondFragment extends Fragment {
             currentLeg = currentSet.getLegsList().get(0);
             updateCurrentPlayerState();
             updateUI();
-            createPlayerButtons();
         }
 
         //add event handlers
@@ -407,8 +409,7 @@ public class SecondFragment extends Fragment {
             binding.edittextThrow1.requestFocus();
         }
         
-        // Refresh player buttons to update icons
-        createPlayerButtons();
+        updatePlayerTable();
     }
 
     private void setInputsEnabled(boolean enabled) {
@@ -452,68 +453,76 @@ public class SecondFragment extends Fragment {
         binding.layoutThrow3.setError(null);
     }
 
-    private void createPlayerButtons() {
-        binding.playersButtonsContainer.removeAllViews();
+    private void updatePlayerTable() {
+        if (currentMatch == null || currentLeg == null) return;
+
+        // Update header with sets to win
+        binding.headerPlayer.setText(getString(R.string.first_to_sets_label, currentMatch.getSetsNo()));
+
+        // Remove all rows except the header
+        int childCount = binding.tablePlayersScore.getChildCount();
+        if (childCount > 1) {
+            binding.tablePlayersScore.removeViews(1, childCount - 1);
+        }
+
         List<Player> players = currentMatch.getPlayersList();
-        LinearLayout currentRow = null;
+        int startingPlayerIndex = (currentLeg.getDisplayNo() - 1) % players.size();
 
         for (int i = 0; i < players.size(); i++) {
-            if (i % 2 == 0) {
-                currentRow = new LinearLayout(getContext());
-                currentRow.setOrientation(LinearLayout.HORIZONTAL);
-                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                currentRow.setLayoutParams(rowParams);
-                binding.playersButtonsContainer.addView(currentRow);
-            }
-
             Player player = players.get(i);
-            MaterialButton playerButton = new MaterialButton(
-                    getContext(),
-                    null,
-                    com.google.android.material.R.attr.materialButtonStyle
-            );
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    0,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1.0f
-            );
-            params.setMargins(4, 4, 4, 4);
-            playerButton.setLayoutParams(params);
-
             PlayerLeg pl = getCurrentPlayerLeg(player, currentLeg);
-            String name = player.getDisplayName();
-            int score = (pl != null) ? pl.getCurrentScore() : currentMatch.getLegSize();
-            int wins = player.getWonLegsNo();
-            
-            String buttonText = name + "\n" + score + " [" + wins + "]";
-            
-            int startingPlayerIndex = (currentLeg.getDisplayNo() - 1) % players.size();
-            if (i == startingPlayerIndex) {
-                buttonText += " [*]";
-            }
 
-            playerButton.setText(buttonText);
-
-            if (pl != null && pl.isCurrentPlayer()) {
-                playerButton.setIconResource(R.drawable.ic_current_player_dart);
-                playerButton.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
-            } else {
-                playerButton.setIcon(null);
+            TableRow row = new TableRow(getContext());
+            row.setPadding(0, 8, 0, 8);
+            
+            // Highlight current turn player or selected player
+            if (i == actualTurnPlayerIndex) {
+                row.setBackgroundResource(R.color.highlight_turn);
+            } else if (i == selectedPlayerIndex) {
+                 row.setBackgroundResource(R.color.highlight_selected);
             }
 
             final int index = i;
-            playerButton.setOnClickListener(v -> {
+            row.setOnClickListener(v -> {
                 selectedPlayerIndex = index;
                 updateUI();
             });
 
-            if (currentRow != null) {
-                currentRow.addView(playerButton);
+            // Column 1: Player Name + Dart Icon if starter
+            TextView nameTxt = new TextView(getContext());
+            nameTxt.setText(player.getDisplayName());
+            nameTxt.setPadding(8, 8, 8, 8);
+            if (i == startingPlayerIndex) {
+                nameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_current_player_dart, 0, 0, 0);
+                nameTxt.setCompoundDrawablePadding(8);
             }
+            row.addView(nameTxt);
+
+            // Column 2: Sets
+            TextView setsTxt = new TextView(getContext());
+            setsTxt.setText(String.valueOf(player.getWonSetsNo()));
+            setsTxt.setGravity(Gravity.CENTER);
+            setsTxt.setPadding(8, 8, 8, 8);
+            row.addView(setsTxt);
+
+            // Column 3: Legs
+            TextView legsTxt = new TextView(getContext());
+            legsTxt.setText(String.valueOf(player.getWonLegsNo()));
+            legsTxt.setGravity(Gravity.CENTER);
+            legsTxt.setPadding(8, 8, 8, 8);
+            row.addView(legsTxt);
+
+            // Column 4: Score
+            TextView scoreTxt = new TextView(getContext());
+            int score = (pl != null) ? pl.getCurrentScore() : currentMatch.getLegSize();
+            scoreTxt.setText(String.valueOf(score));
+            scoreTxt.setGravity(Gravity.CENTER);
+            scoreTxt.setPadding(8, 8, 8, 8);
+            scoreTxt.setTextSize(18);
+            scoreTxt.setTypeface(null, Typeface.BOLD);
+            row.addView(scoreTxt);
+
+            binding.tablePlayersScore.addView(row);
         }
     }
 
