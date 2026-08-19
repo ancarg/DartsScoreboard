@@ -269,7 +269,19 @@ public class SecondFragment extends Fragment {
     }
 
     private void handleSubmit() {
-        if (isAnyThrowEmpty()) {
+        Player currentPlayer = currentMatch.getPlayersList().get(actualTurnPlayerIndex);
+        PlayerLeg pl = getCurrentPlayerLeg(currentPlayer, currentLeg);
+
+        if (pl == null) return;
+
+        int totalRoundScore = 0;
+        totalRoundScore += getValidatedThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
+        totalRoundScore += getValidatedThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
+        totalRoundScore += getValidatedThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
+
+        boolean isCheckout = (totalRoundScore == pl.getCurrentScore());
+
+        if (!isCheckout && isAnyThrowEmpty()) {
             Toast.makeText(getContext(), R.string.throws_remaining, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -278,17 +290,6 @@ public class SecondFragment extends Fragment {
             Toast.makeText(getContext(), "Please fix errors", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        Player currentPlayer = currentMatch.getPlayersList().get(actualTurnPlayerIndex);
-        PlayerLeg pl = getCurrentPlayerLeg(currentPlayer, currentLeg);
-
-        if (pl == null) return;
-
-        int totalRoundScore = 0;
-
-        totalRoundScore += getValidatedThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
-        totalRoundScore += getValidatedThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
-        totalRoundScore += getValidatedThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
 
         Round round = new Round(currentLeg.getId());
         round.setThrowsTotalScore(String.valueOf(totalRoundScore));
