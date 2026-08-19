@@ -78,7 +78,6 @@ public class SecondFragment extends Fragment {
         if (currentMatch != null && !currentMatch.getSetsList().isEmpty()) {
             currentSet = currentMatch.getSetsList().get(0);
             currentLeg = currentSet.getLegsList().get(0);
-            updateCurrentPlayerState();
             updateUI();
         }
 
@@ -315,7 +314,6 @@ public class SecondFragment extends Fragment {
         // Move to next player
         actualTurnPlayerIndex = (actualTurnPlayerIndex + 1) % currentMatch.getPlayersList().size();
         selectedPlayerIndex = actualTurnPlayerIndex;
-        updateCurrentPlayerState();
         updateUI();
     }
 
@@ -363,19 +361,7 @@ public class SecondFragment extends Fragment {
         actualTurnPlayerIndex = (nextLegDisplayNo - 1) % currentMatch.getPlayersList().size();
         selectedPlayerIndex = actualTurnPlayerIndex;
         clearInputs();
-        updateCurrentPlayerState();
         updateUI();
-    }
-
-    //----------------------------------------------------------------------
-    private void updateCurrentPlayerState() {
-        for (int i = 0; i < currentMatch.getPlayersList().size(); i++) {
-            Player p = currentMatch.getPlayersList().get(i);
-            PlayerLeg pl = getCurrentPlayerLeg(p, currentLeg);
-            if (pl != null) {
-                pl.setCurrentPlayer(i == actualTurnPlayerIndex);
-            }
-        }
     }
 
     private void updateUI() {
@@ -390,9 +376,6 @@ public class SecondFragment extends Fragment {
             }
         }
 
-        binding.textviewPlayerName.setText(getString(R.string.player_display_name, selectedPlayer.getDisplayName()));
-        binding.textviewPlayerWins.setText(getString(R.string.wins_label, selectedPlayer.getWonLegsNo()));
-        
         PlayerLeg selectedPL = getCurrentPlayerLeg(selectedPlayer, currentLeg);
         if (selectedPL != null) {
             binding.textviewCurrentScore.setText(String.valueOf(selectedPL.getCurrentScore()));

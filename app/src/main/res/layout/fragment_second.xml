@@ -18,33 +18,14 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textview_player_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Player Player 1" />
-
-            <TextView
-                android:id="@+id/textview_player_wins"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Wins: 0" />
-
-            <TextView
                 android:id="@+id/textview_current_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:textSize="64sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textview_player_name"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="501" />
 
             <!-- Throw 1 -->
@@ -250,6 +231,7 @@
         android:id="@+id/players_table_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         app:cardElevation="8dp"
         app:cardCornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent">

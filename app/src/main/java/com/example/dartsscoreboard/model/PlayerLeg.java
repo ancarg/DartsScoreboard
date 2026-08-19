@@ -10,8 +10,6 @@ public class PlayerLeg {
 
     private String legId;
 
-    private boolean isCurrentPlayer;
-
     private int currentScore;
 
     private ArrayList<Round> roundsList;
@@ -42,14 +40,6 @@ public class PlayerLeg {
 
     public ArrayList<Round> getRoundsList() {
         return roundsList;
-    }
-
-    public boolean isCurrentPlayer() {
-        return isCurrentPlayer;
-    }
-
-    public void setCurrentPlayer(boolean currentPlayer) {
-        isCurrentPlayer = currentPlayer;
     }
 
     public void setRoundsList(ArrayList<Round> roundsList) {
