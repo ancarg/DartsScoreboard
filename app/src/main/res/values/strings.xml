@@ -22,6 +22,8 @@
     <string name="leg_length_label">Leg length</string>
     <string name="start_game">Start Game</string>
     <string name="invalid_first_to">Must be greater than 0</string>
+    <string name="legs_to_win_label">Legs to win</string>
+    <string name="invalid_legs_to_win">Must be greater than 0</string>
     <string name="leg_label">Leg %d</string>
     <string name="player_display_name">Player: %s</string>
     <string name="wins_label">Wins: %d</string>

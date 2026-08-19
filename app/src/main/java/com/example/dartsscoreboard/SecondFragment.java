@@ -27,6 +27,7 @@ import com.example.dartsscoreboard.model.Match;
 import com.example.dartsscoreboard.model.Player;
 import com.example.dartsscoreboard.model.PlayerLeg;
 import com.example.dartsscoreboard.model.Round;
+import com.example.dartsscoreboard.model.Set;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -42,6 +43,7 @@ public class SecondFragment extends Fragment {
     private Match currentMatch;
     private int selectedPlayerIndex = 0;
     private int actualTurnPlayerIndex = 0;
+    private Set currentSet;
     private Leg currentLeg;
 
     @Override
@@ -70,8 +72,9 @@ public class SecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         currentMatch = initMatchModel();
-        if (currentMatch != null && !currentMatch.getLegsList().isEmpty()) {
-            currentLeg = currentMatch.getLegsList().get(0);
+        if (currentMatch != null && !currentMatch.getSetsList().isEmpty()) {
+            currentSet = currentMatch.getSetsList().get(0);
+            currentLeg = currentSet.getLegsList().get(0);
             updateCurrentPlayerState();
             updateUI();
             createPlayerButtons();
@@ -229,11 +232,14 @@ public class SecondFragment extends Fragment {
         if (getArguments() != null) {
             List<String> playerNames = getArguments().getStringArrayList("playerNames");
             int firstTo = getArguments().getInt("firstTo");
+            int legsToWinSet = getArguments().getInt("legsToWinSet");
             int legSize = getArguments().getInt("legLength");
 
-            Match match = new Match(firstTo * 2 - 1, legSize);
-            Leg firstLeg = new Leg(match.getId(), 1);
-            match.getLegsList().add(firstLeg);
+            Match match = new Match(firstTo, legsToWinSet, legSize);
+            Set firstSet = new Set(match.getId(), 1);
+            Leg firstLeg = new Leg(match.getId(), firstSet.getId(), 1);
+            firstSet.getLegsList().add(firstLeg);
+            match.getSetsList().add(firstSet);
 
             ArrayList<Player> players = new ArrayList<>();
             if (playerNames != null) {
@@ -294,6 +300,7 @@ public class SecondFragment extends Fragment {
             if (newScore == 0) {
                 Toast.makeText(getContext(), currentPlayer.getDisplayName() + " won the leg!", Toast.LENGTH_LONG).show();
                 currentPlayer.setWonLegsNo(currentPlayer.getWonLegsNo() + 1);
+                currentLeg.setWinnerId(currentPlayer.getId());
                 startNewLeg();
                 return; // startNewLeg handles UI refresh and player resets
             }
@@ -311,9 +318,39 @@ public class SecondFragment extends Fragment {
     }
 
     private void startNewLeg() {
-        int nextLegNo = currentMatch.getLegsList().size() + 1;
-        currentLeg = new Leg(currentMatch.getId(), nextLegNo);
-        currentMatch.getLegsList().add(currentLeg);
+        // Check if current set is finished
+        int winnerLegsCount = 0;
+        String lastWinnerId = currentLeg.getWinnerId();
+        for (Leg leg : currentSet.getLegsList()) {
+            if (lastWinnerId != null && lastWinnerId.equals(leg.getWinnerId())) {
+                winnerLegsCount++;
+            }
+        }
+
+        if (winnerLegsCount >= currentMatch.getLegsNo()) {
+            // Player won the set
+            for (Player p : currentMatch.getPlayersList()) {
+                if (p.getId().equals(lastWinnerId)) {
+                    p.setWonSetsNo(p.getWonSetsNo() + 1);
+                    Toast.makeText(getContext(), p.getDisplayName() + " won the set!", Toast.LENGTH_LONG).show();
+                    break;
+                }
+            }
+            // Start new set
+            int nextSetNo = currentMatch.getSetsList().size() + 1;
+            currentSet = new Set(currentMatch.getId(), nextSetNo);
+            currentMatch.getSetsList().add(currentSet);
+        }
+
+        // Calculate cumulative leg number for display
+        int totalLegsCount = 0;
+        for (Set s : currentMatch.getSetsList()) {
+            totalLegsCount += s.getLegsList().size();
+        }
+        int nextLegDisplayNo = totalLegsCount + 1;
+
+        currentLeg = new Leg(currentMatch.getId(), currentSet.getId(), nextLegDisplayNo);
+        currentSet.getLegsList().add(currentLeg);
 
         for (Player player : currentMatch.getPlayersList()) {
             PlayerLeg pl = new PlayerLeg(currentMatch.getId(), player.getId(), currentLeg.getId(), currentMatch.getLegSize());
@@ -321,7 +358,7 @@ public class SecondFragment extends Fragment {
             player.getPlayerLegsList().add(pl);
         }
 
-        actualTurnPlayerIndex = (nextLegNo - 1) % currentMatch.getPlayersList().size();
+        actualTurnPlayerIndex = (nextLegDisplayNo - 1) % currentMatch.getPlayersList().size();
         selectedPlayerIndex = actualTurnPlayerIndex;
         clearInputs();
         updateCurrentPlayerState();

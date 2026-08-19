@@ -10,6 +10,7 @@ public class Player {
     private String displayName;
 
     private int wonLegsNo;
+    private int wonSetsNo;
 
     private ArrayList<PlayerLeg> playerLegsList;
 
@@ -37,6 +38,14 @@ public class Player {
 
     public void setWonLegsNo(int wonLegsNo) {
         this.wonLegsNo = wonLegsNo;
+    }
+
+    public int getWonSetsNo() {
+        return wonSetsNo;
+    }
+
+    public void setWonSetsNo(int wonSetsNo) {
+        this.wonSetsNo = wonSetsNo;
     }
 
     public ArrayList<PlayerLeg> getPlayerLegsList() {

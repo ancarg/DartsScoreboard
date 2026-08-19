@@ -7,17 +7,21 @@ public class Match {
     private String id;
     private LocalDateTime startDate;
     private int legsNo;
+
+    private int setsNo;
+
     private int legSize;
 
     private ArrayList<Player> playersList = new ArrayList<>();
 
-    private ArrayList<Leg> legsList = new ArrayList<>();
+    private ArrayList<Set> setsList = new ArrayList<>();
 
-    public Match(int legsNo, int legSize) {
+    public Match(int setsNo, int legsNo, int legSize) {
         this.id = "IDM-" + System.currentTimeMillis();
         this.startDate = LocalDateTime.now();
         this.legsNo = legsNo;
         this.legSize = legSize;
+        this.setsNo = setsNo;
     }
 
     public int getLegsNo() {
@@ -28,6 +32,14 @@ public class Match {
         return legSize;
     }
 
+    public int getSetsNo() {
+        return setsNo;
+    }
+
+    public void setSetsNo(int setsNo) {
+        this.setsNo = setsNo;
+    }
+
     public ArrayList<Player> getPlayersList() {
         return playersList;
     }
@@ -36,12 +48,12 @@ public class Match {
         this.playersList = playersList;
     }
 
-    public ArrayList<Leg> getLegsList() {
-        return legsList;
+    public ArrayList<Set> getSetsList() {
+        return setsList;
     }
 
-    public void setLegsList(ArrayList<Leg> legsList) {
-        this.legsList = legsList;
+    public void setSetsList(ArrayList<Set> setsList) {
+        this.setsList = setsList;
     }
 
     public String getId() {
