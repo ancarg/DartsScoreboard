@@ -333,8 +333,9 @@ public class SecondFragment extends Fragment {
                 if (p.getId().equals(lastWinnerId)) {
                     p.setWonSetsNo(p.getWonSetsNo() + 1);
                     Toast.makeText(getContext(), p.getDisplayName() + " won the set!", Toast.LENGTH_LONG).show();
-                    break;
                 }
+                // Reset legs won in the set for all players
+                p.setWonLegsNo(0);
             }
             // Start new set
             int nextSetNo = currentMatch.getSetsList().size() + 1;
@@ -372,9 +373,12 @@ public class SecondFragment extends Fragment {
         if (getActivity() instanceof AppCompatActivity) {
             AppCompatActivity activity = (AppCompatActivity) getActivity();
             if (activity.getSupportActionBar() != null) {
-                activity.getSupportActionBar().setTitle(getString(R.string.leg_label, currentLeg.getDisplayNo()));
+                activity.getSupportActionBar().setTitle(getString(R.string.set_leg_label, currentSet.getDisplayNo(), currentLeg.getDisplayNo()));
             }
         }
+
+        Player activePlayer = currentMatch.getPlayersList().get(actualTurnPlayerIndex);
+        binding.textviewActivePlayerName.setText(activePlayer.getDisplayName());
 
         PlayerLeg selectedPL = getCurrentPlayerLeg(selectedPlayer, currentLeg);
         if (selectedPL != null) {

@@ -25,6 +25,7 @@
     <string name="legs_to_win_label">Legs to win set</string>
     <string name="invalid_legs_to_win">Must be greater than 0</string>
     <string name="leg_label">Leg %d</string>
+    <string name="set_leg_label">Set %1$d - Leg %2$d</string>
     <string name="throw_hint1">1st throw</string>
     <string name="throw_hint2">2nd throw</string>
     <string name="throw_hint3">3rd throw</string>

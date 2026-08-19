@@ -18,14 +18,24 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/textview_active_player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Player 1" />
+
+            <TextView
                 android:id="@+id/textview_current_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:textSize="64sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textview_active_player_name"
                 tools:text="501" />
 
             <!-- Throw 1 -->
@@ -33,9 +43,9 @@
                 android:id="@+id/toggle_group_throw_type_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textview_current_score"
+                app:layout_constraintTop_toTopOf="@id/layout_throw_1"
                 app:singleSelection="true">
 
                 <Button
@@ -72,11 +82,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
                 android:hint="@string/throw_hint1"
-                app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_1"
-                app:layout_constraintTop_toTopOf="@id/toggle_group_throw_type_1">
+                app:layout_constraintTop_toBottomOf="@id/textview_current_score">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edittext_throw_1"
@@ -91,9 +101,9 @@
                 android:id="@+id/toggle_group_throw_type_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_throw_1"
+                app:layout_constraintTop_toTopOf="@id/layout_throw_2"
                 app:singleSelection="true">
 
                 <Button
@@ -130,11 +140,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:hint="@string/throw_hint2"
-                app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_2"
-                app:layout_constraintTop_toTopOf="@id/toggle_group_throw_type_2">
+                app:layout_constraintTop_toBottomOf="@id/layout_throw_1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edittext_throw_2"
@@ -149,9 +159,9 @@
                 android:id="@+id/toggle_group_throw_type_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_throw_2"
+                app:layout_constraintTop_toTopOf="@id/layout_throw_3"
                 app:singleSelection="true">
 
                 <Button
@@ -188,11 +198,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:hint="@string/throw_hint3"
-                app:layout_constraintBottom_toBottomOf="@id/toggle_group_throw_type_3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/toggle_group_throw_type_3"
-                app:layout_constraintTop_toTopOf="@id/toggle_group_throw_type_3">
+                app:layout_constraintTop_toBottomOf="@id/layout_throw_2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edittext_throw_3"
