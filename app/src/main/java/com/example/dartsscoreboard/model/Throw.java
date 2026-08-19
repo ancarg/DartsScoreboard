@@ -8,7 +8,7 @@ public class Throw {
     private ThrowType type;
 
     public Throw(String roundId, int dartHit, ThrowType type) {
-        this.id = "IDT-" + System.currentTimeMillis();
+        this.id = "IDT-" + java.util.UUID.randomUUID().toString();
         this.roundId = roundId;
         this.dartHit = dartHit;
         this.type = type;

@@ -17,7 +17,7 @@ public class Match {
     private ArrayList<Set> setsList = new ArrayList<>();
 
     public Match(int setsNo, int legsNo, int legSize) {
-        this.id = "IDM-" + System.currentTimeMillis();
+        this.id = "IDM-" + java.util.UUID.randomUUID().toString();
         this.startDate = LocalDateTime.now();
         this.legsNo = legsNo;
         this.legSize = legSize;

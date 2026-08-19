@@ -1,6 +1,7 @@
 package com.example.dartsscoreboard.model;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Player {
 
@@ -15,7 +16,7 @@ public class Player {
     private ArrayList<PlayerLeg> playerLegsList;
 
     public Player(String matchId, String displayName) {
-        this.id = "IDP-" + System.currentTimeMillis();
+        this.id = "IDP-" + UUID.randomUUID().toString();
         this.matchId = matchId;
         this.displayName = displayName;
     }

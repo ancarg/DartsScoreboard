@@ -11,7 +11,7 @@ public class Set {
     private ArrayList<Leg> legsList = new ArrayList<>();
 
     public Set(String matchId, int displayNo) {
-        this.id = "IDS-" + System.currentTimeMillis();
+        this.id = "IDS-" + java.util.UUID.randomUUID().toString();
         this.matchId = matchId;
         this.displayNo = displayNo;
     }

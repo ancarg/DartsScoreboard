@@ -9,7 +9,7 @@ public class Leg {
 
 
     public Leg(String matchId, String setId, int displayNo) {
-        this.id = "IDL-" + System.currentTimeMillis();
+        this.id = "IDL-" + java.util.UUID.randomUUID().toString();
         this.matchId = matchId;
         this.setId = setId;
         this.displayNo = displayNo;

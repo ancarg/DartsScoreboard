@@ -10,7 +10,7 @@ public class Round {
 
     private ArrayList<Throw> throwsList  = new ArrayList<>();
     public Round(String legId) {
-        id = "IDR-" + System.currentTimeMillis();
+        id = "IDR-" + java.util.UUID.randomUUID().toString();
         this.legId = legId;
     }
 

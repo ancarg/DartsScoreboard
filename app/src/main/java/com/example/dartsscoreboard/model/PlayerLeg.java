@@ -15,7 +15,7 @@ public class PlayerLeg {
     private ArrayList<Round> roundsList;
 
     public PlayerLeg(String matchId, String playerId, String legId, int currentScore) {
-        this.id = "IDPL-" + System.currentTimeMillis();
+        this.id = "IDPL-" + java.util.UUID.randomUUID().toString();
         this.matchId = matchId;
         this.playerId = playerId;
         this.legId = legId;

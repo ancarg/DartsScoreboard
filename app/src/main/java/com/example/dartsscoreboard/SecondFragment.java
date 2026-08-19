@@ -344,12 +344,15 @@ public class SecondFragment extends Fragment {
             currentMatch.getSetsList().add(currentSet);
         }
 
-        // Calculate cumulative leg number for display
+        // Calculate cumulative leg number for turn logic
         int totalLegsCount = 0;
         for (Set s : currentMatch.getSetsList()) {
             totalLegsCount += s.getLegsList().size();
         }
-        int nextLegDisplayNo = totalLegsCount + 1;
+        int nextMatchLegNo = totalLegsCount + 1;
+
+        // Leg number for display (within current set)
+        int nextLegDisplayNo = currentSet.getLegsList().size() + 1;
 
         currentLeg = new Leg(currentMatch.getId(), currentSet.getId(), nextLegDisplayNo);
         currentSet.getLegsList().add(currentLeg);
@@ -360,7 +363,7 @@ public class SecondFragment extends Fragment {
             player.getPlayerLegsList().add(pl);
         }
 
-        actualTurnPlayerIndex = (nextLegDisplayNo - 1) % currentMatch.getPlayersList().size();
+        actualTurnPlayerIndex = (nextMatchLegNo - 1) % currentMatch.getPlayersList().size();
         selectedPlayerIndex = actualTurnPlayerIndex;
         clearInputs();
         updateUI();
