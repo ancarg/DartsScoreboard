@@ -31,10 +31,10 @@ public class FirstFragment extends Fragment {
     private final List<Integer> playerButtonIds = new ArrayList<>();
     private int playerSequence = 2; // Starts with 2 players
     private final int maxNoPlayers = 4; //maximum number of players
-    private int defaultFirstTo = 8; //the default value for first to x legs config
-    private int legsToWinSet = 3; //the default value for the no of legs needed to win
+    private int defaultSetsToWinMatch = 6; //the default value for first to x legs config
+    private int defaultLegsToWinSet = 3; //the default value for the no of legs needed to win
     private final int[] legLength = new int[]  {301, 501}; //the length of a leg
-    private int selectedLegLength = 501;
+    private int selectedLegLength = 301;
 
     @Override
     public View onCreateView(
@@ -57,8 +57,8 @@ public class FirstFragment extends Fragment {
 
         binding.buttonAddPlayer.setOnClickListener(v -> addPlayer());
 
-        binding.edittextFirstTo.setText(String.valueOf(defaultFirstTo));
-        binding.edittextFirstTo.addTextChangedListener(new TextWatcher() {
+        binding.edittextSetsToWinMatch.setText(String.valueOf(defaultSetsToWinMatch));
+        binding.edittextSetsToWinMatch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -71,21 +71,21 @@ public class FirstFragment extends Fragment {
                     try {
                         int value = Integer.parseInt(s.toString());
                         if (value > 0) {
-                            defaultFirstTo = value;
-                            binding.layoutFirstTo.setError(null);
+                            defaultSetsToWinMatch = value;
+                            binding.layoutSetsToWinMatch.setError(null);
                         } else {
-                            binding.layoutFirstTo.setError(getString(R.string.invalid_first_to));
+                            binding.layoutSetsToWinMatch.setError(getString(R.string.invalid_sets_to_win_match));
                         }
                     } catch (NumberFormatException e) {
-                        binding.layoutFirstTo.setError(getString(R.string.invalid_first_to));
+                        binding.layoutSetsToWinMatch.setError(getString(R.string.invalid_sets_to_win_match));
                     }
                 } else {
-                    binding.layoutFirstTo.setError(getString(R.string.invalid_first_to));
+                    binding.layoutSetsToWinMatch.setError(getString(R.string.invalid_sets_to_win_match));
                 }
             }
         });
 
-        binding.edittextLegsToWin.setText(String.valueOf(legsToWinSet));
+        binding.edittextLegsToWin.setText(String.valueOf(defaultLegsToWinSet));
         binding.edittextLegsToWin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -99,7 +99,7 @@ public class FirstFragment extends Fragment {
                     try {
                         int value = Integer.parseInt(s.toString());
                         if (value > 0) {
-                            legsToWinSet = value;
+                            defaultLegsToWinSet = value;
                             binding.layoutLegsToWin.setError(null);
                         } else {
                             binding.layoutLegsToWin.setError(getString(R.string.invalid_legs_to_win));
@@ -159,8 +159,8 @@ public class FirstFragment extends Fragment {
     }
 
     private void startGame() {
-        if (binding.layoutFirstTo.getError() != null) {
-            Toast.makeText(requireContext(), R.string.invalid_first_to, Toast.LENGTH_SHORT).show();
+        if (binding.layoutSetsToWinMatch.getError() != null) {
+            Toast.makeText(requireContext(), R.string.invalid_sets_to_win_match, Toast.LENGTH_SHORT).show();
             return;
         }
         if (binding.layoutLegsToWin.getError() != null) {
@@ -191,8 +191,8 @@ public class FirstFragment extends Fragment {
 
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("playerNames", new ArrayList<>(playerNames));
-        bundle.putInt("firstTo", defaultFirstTo);
-        bundle.putInt("legsToWinSet", legsToWinSet);
+        bundle.putInt("setsToWinMatch", defaultSetsToWinMatch);
+        bundle.putInt("legsToWinSet", defaultLegsToWinSet);
         bundle.putInt("legLength", selectedLegLength);
 
         NavHostFragment.findNavController(this)

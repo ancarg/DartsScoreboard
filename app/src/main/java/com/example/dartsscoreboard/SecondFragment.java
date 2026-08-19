@@ -231,11 +231,11 @@ public class SecondFragment extends Fragment {
     private Match initMatchModel() {
         if (getArguments() != null) {
             List<String> playerNames = getArguments().getStringArrayList("playerNames");
-            int firstTo = getArguments().getInt("firstTo");
+            int setsToWinMatch = getArguments().getInt("setsToWinMatch");
             int legsToWinSet = getArguments().getInt("legsToWinSet");
             int legSize = getArguments().getInt("legLength");
 
-            Match match = new Match(firstTo, legsToWinSet, legSize);
+            Match match = new Match(setsToWinMatch, legsToWinSet, legSize);
             Set firstSet = new Set(match.getId(), 1);
             Leg firstLeg = new Leg(match.getId(), firstSet.getId(), 1);
             firstSet.getLegsList().add(firstLeg);

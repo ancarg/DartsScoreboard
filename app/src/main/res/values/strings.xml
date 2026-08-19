@@ -18,11 +18,11 @@
     <string name="add_player">Add Player</string>
     <string name="max_players_reached">Maximum 4 players allowed</string>
     <string name="player_label">Player %d</string>
-    <string name="first_to_label">First to</string>
+    <string name="sets_to_win_match_label">Sets to win match</string>
     <string name="leg_length_label">Leg length</string>
     <string name="start_game">Start Game</string>
-    <string name="invalid_first_to">Must be greater than 0</string>
-    <string name="legs_to_win_label">Legs to win</string>
+    <string name="invalid_sets_to_win_match">Must be greater than 0</string>
+    <string name="legs_to_win_label">Legs to win set</string>
     <string name="invalid_legs_to_win">Must be greater than 0</string>
     <string name="leg_label">Leg %d</string>
     <string name="player_display_name">Player: %s</string>
