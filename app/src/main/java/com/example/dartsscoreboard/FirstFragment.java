@@ -97,14 +97,35 @@ public class FirstFragment extends Fragment {
         for (int length : legLength) {
             options.add(String.valueOf(length));
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, options);
+        // Using a custom adapter that disables filtering to ensure all options are always visible
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, options) {
+            @NonNull
+            @Override
+            public android.widget.Filter getFilter() {
+                return new android.widget.Filter() {
+                    @Override
+                    protected FilterResults performFiltering(CharSequence constraint) {
+                        FilterResults results = new FilterResults();
+                        results.values = options;
+                        results.count = options.size();
+                        return results;
+                    }
+
+                    @Override
+                    protected void publishResults(CharSequence constraint, FilterResults results) {
+                        notifyDataSetChanged();
+                    }
+                };
+            }
+        };
         binding.dropdownLegLength.setAdapter(adapter);
         
         // Set default selection
         binding.dropdownLegLength.setText(String.valueOf(selectedLegLength), false);
         
         binding.dropdownLegLength.setOnItemClickListener((parent, view, position, id) -> {
-            selectedLegLength = legLength[position];
+            String selectedValue = (String) parent.getItemAtPosition(position);
+            selectedLegLength = Integer.parseInt(selectedValue);
         });
     }
 
