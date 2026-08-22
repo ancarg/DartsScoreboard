@@ -159,12 +159,21 @@ public class SecondFragment extends Fragment {
     }
 
     private void calculateAndDisplayTotal() {
+        if (binding == null || currentMatch == null || currentLeg == null) return;
+
         int total = 0;
         total += getValidatedThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
         total += getValidatedThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
         total += getValidatedThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
-        
-        binding.textviewRoundTotalScore.setText(String.valueOf(total));
+
+        Player selectedPlayer = currentMatch.getPlayersList().get(selectedPlayerIndex);
+        PlayerLeg pl = getCurrentPlayerLeg(selectedPlayer, currentLeg);
+        if (pl != null) {
+            int remaining = pl.getCurrentScore() - total;
+            binding.textviewRoundTotalScore.setText(getString(R.string.round_score_with_remaining, total, remaining));
+        } else {
+            binding.textviewRoundTotalScore.setText(String.valueOf(total));
+        }
     }
 
     private int getValidatedThrowScore(TextInputEditText editText, MaterialButtonToggleGroup toggleGroup) {
@@ -400,10 +409,10 @@ public class SecondFragment extends Fragment {
         if (selectedPL != null) {
             binding.textviewCurrentScore.setText(String.valueOf(selectedPL.getCurrentScore()));
         }
-        
+
         // Reset round total score display for the current user's new turn
-        binding.textviewRoundTotalScore.setText("0");
-        
+        calculateAndDisplayTotal();
+
         // Enable/Disable inputs based on whether the selected player is the one whose turn it is
         boolean isCurrentTurn = (selectedPlayerIndex == actualTurnPlayerIndex);
         setInputsEnabled(isCurrentTurn);
@@ -449,8 +458,8 @@ public class SecondFragment extends Fragment {
         binding.toggleGroupThrowType1.clearChecked();
         binding.toggleGroupThrowType2.clearChecked();
         binding.toggleGroupThrowType3.clearChecked();
-        binding.textviewRoundTotalScore.setText("0");
-        
+        calculateAndDisplayTotal();
+
         binding.layoutThrow1.setError(null);
         binding.layoutThrow2.setError(null);
         binding.layoutThrow3.setError(null);

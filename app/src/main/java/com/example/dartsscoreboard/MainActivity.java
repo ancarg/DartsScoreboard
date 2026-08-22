@@ -17,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.dartsscoreboard.databinding.ActivityMainBinding;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,11 +65,20 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_disclaimer) {
+            showDisclaimerDialog();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDisclaimerDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.action_disclaimer)
+                .setMessage(R.string.disclaimer_text)
+                .setPositiveButton(R.string.close, null)
+                .show();
     }
 
     @Override
