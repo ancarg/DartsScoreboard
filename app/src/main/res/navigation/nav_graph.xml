@@ -27,7 +27,9 @@
 
         <action
             android:id="@+id/action_SecondFragment_to_WinnerFragment"
-            app:destination="@id/WinnerFragment" />
+            app:destination="@id/WinnerFragment"
+            app:popUpTo="@id/FirstFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment

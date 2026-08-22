@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.dartsscoreboard.databinding.FragmentWinnerBinding;
@@ -16,6 +16,19 @@ import com.example.dartsscoreboard.databinding.FragmentWinnerBinding;
 public class WinnerFragment extends Fragment {
 
     private FragmentWinnerBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateToStart();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,13 +45,11 @@ public class WinnerFragment extends Fragment {
             binding.textviewCongratulations.setText(getString(R.string.congratulations_format, winnerName));
         }
 
-        binding.buttonClose.setOnClickListener(v -> {
-            NavOptions navOptions = new NavOptions.Builder()
-                    .setPopUpTo(R.id.FirstFragment, true)
-                    .build();
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.FirstFragment, null, navOptions);
-        });
+        binding.buttonClose.setOnClickListener(v -> navigateToStart());
+    }
+
+    private void navigateToStart() {
+        NavHostFragment.findNavController(this).popBackStack(R.id.FirstFragment, false);
     }
 
     @Override
