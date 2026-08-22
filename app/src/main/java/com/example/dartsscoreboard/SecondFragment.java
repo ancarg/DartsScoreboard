@@ -520,10 +520,10 @@ public class SecondFragment extends Fragment {
             nameTxt.setPadding(16, 16, 16, 16);
             nameTxt.setTextColor(textColor);
             if (i == startingPlayerIndex) {
-                nameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_current_player_dart, 0, 0, 0);
+                nameTxt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_current_player_dart, 0);
                 nameTxt.setCompoundDrawablePadding(8);
-                if (nameTxt.getCompoundDrawables()[0] != null) {
-                    nameTxt.getCompoundDrawables()[0].setTint(textColor);
+                if (nameTxt.getCompoundDrawables()[2] != null) {
+                    nameTxt.getCompoundDrawables()[2].setTint(textColor);
                 }
             }
             row.addView(nameTxt);
