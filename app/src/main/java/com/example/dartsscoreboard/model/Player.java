@@ -9,7 +9,7 @@ public class Player {
     private String matchId;
 
     private String displayName;
-
+    private Float playerAverage;
     private int wonLegsNo;
     private int wonSetsNo;
 
@@ -51,6 +51,14 @@ public class Player {
 
     public ArrayList<PlayerLeg> getPlayerLegsList() {
         return playerLegsList;
+    }
+
+    public Float getPlayerAverage() {
+        return playerAverage;
+    }
+
+    public void setPlayerAverage(Float playerAverage) {
+        this.playerAverage = playerAverage;
     }
 
     public void setPlayerLegsList(ArrayList<PlayerLeg> playerLegsList) {

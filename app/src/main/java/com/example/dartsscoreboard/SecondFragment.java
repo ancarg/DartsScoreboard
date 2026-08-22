@@ -41,6 +41,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SecondFragment extends Fragment {
 
@@ -307,6 +308,8 @@ public class SecondFragment extends Fragment {
         if (pl.getRoundsList() == null) pl.setRoundsList(new ArrayList<>());
         pl.getRoundsList().add(round);
 
+        updatePlayerAverage(currentPlayer);
+
         int newScore = pl.getCurrentScore() - totalRoundScore;
         if (newScore >= 0) {
             pl.setCurrentScore(newScore);
@@ -407,6 +410,12 @@ public class SecondFragment extends Fragment {
         Player activePlayer = currentMatch.getPlayersList().get(actualTurnPlayerIndex);
         binding.textviewActivePlayerName.setText(activePlayer.getDisplayName());
 
+        if (activePlayer.getPlayerAverage() != null) {
+            binding.textviewPlayerAverage.setText(String.format(Locale.getDefault(), "Avg: %.2f", activePlayer.getPlayerAverage()));
+        } else {
+            binding.textviewPlayerAverage.setText("Avg: 0.00");
+        }
+
         PlayerLeg selectedPL = getCurrentPlayerLeg(selectedPlayer, currentLeg);
         if (selectedPL != null) {
             binding.textviewCurrentScore.setText(String.valueOf(selectedPL.getCurrentScore()));
@@ -445,6 +454,28 @@ public class SecondFragment extends Fragment {
             }
         }
         return null;
+    }
+
+    private void updatePlayerAverage(Player player) {
+        int totalScore = 0;
+        int totalRounds = 0;
+        if (player.getPlayerLegsList() != null) {
+            for (PlayerLeg pl : player.getPlayerLegsList()) {
+                if (pl.getRoundsList() != null) {
+                    for (Round round : pl.getRoundsList()) {
+                        try {
+                            totalScore += Integer.parseInt(round.getThrowsTotalScore());
+                            totalRounds++;
+                        } catch (NumberFormatException ignored) {}
+                    }
+                }
+            }
+        }
+        if (totalRounds > 0) {
+            player.setPlayerAverage((float) totalScore / totalRounds);
+        } else {
+            player.setPlayerAverage(0.0f);
+        }
     }
 
 
