@@ -261,6 +261,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:textStyle="bold"
+                            android:textColor="?attr/colorOnSecondaryContainer"
                             tools:text="First to 5" />
                         <TextView
                             android:layout_width="wrap_content"
@@ -268,21 +269,24 @@
                             android:padding="8dp"
                             android:text="@string/sets_label"
                             android:textStyle="bold"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            android:textColor="?attr/colorOnSecondaryContainer" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:text="@string/legs_label_table"
                             android:textStyle="bold"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            android:textColor="?attr/colorOnSecondaryContainer" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:text="@string/score_label"
                             android:textStyle="bold"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            android:textColor="?attr/colorOnSecondaryContainer" />
                     </TableRow>
                 </TableLayout>
 

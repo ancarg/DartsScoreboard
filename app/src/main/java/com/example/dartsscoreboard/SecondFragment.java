@@ -1,9 +1,11 @@
 package com.example.dartsscoreboard;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -480,19 +482,31 @@ public class SecondFragment extends Fragment {
         List<Player> players = currentMatch.getPlayersList();
         int startingPlayerIndex = (currentLeg.getDisplayNo() - 1) % players.size();
 
+        int colorPrimaryContainer = getThemeColor(com.google.android.material.R.attr.colorPrimaryContainer);
+        int colorOnPrimaryContainer = getThemeColor(com.google.android.material.R.attr.colorOnPrimaryContainer);
+        int colorSurfaceVariant = getThemeColor(com.google.android.material.R.attr.colorSurfaceVariant);
+        int colorOnSurfaceVariant = getThemeColor(com.google.android.material.R.attr.colorOnSurfaceVariant);
+        int colorOnSurface = getThemeColor(com.google.android.material.R.attr.colorOnSurface);
+
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
             PlayerLeg pl = getCurrentPlayerLeg(player, currentLeg);
 
             TableRow row = new TableRow(getContext());
-            row.setPadding(0, 8, 0, 8);
+            
+            int bgColor = Color.TRANSPARENT;
+            int textColor = colorOnSurface;
             
             // Highlight current turn player or selected player
             if (i == actualTurnPlayerIndex) {
-                row.setBackgroundResource(R.color.highlight_turn);
+                bgColor = colorPrimaryContainer;
+                textColor = colorOnPrimaryContainer;
             } else if (i == selectedPlayerIndex) {
-                 row.setBackgroundResource(R.color.highlight_selected);
+                 bgColor = colorSurfaceVariant;
+                 textColor = colorOnSurfaceVariant;
             }
+            
+            row.setBackgroundColor(bgColor);
 
             final int index = i;
             row.setOnClickListener(v -> {
@@ -503,10 +517,14 @@ public class SecondFragment extends Fragment {
             // Column 1: Player Name + Dart Icon if starter
             TextView nameTxt = new TextView(getContext());
             nameTxt.setText(player.getDisplayName());
-            nameTxt.setPadding(8, 8, 8, 8);
+            nameTxt.setPadding(16, 16, 16, 16);
+            nameTxt.setTextColor(textColor);
             if (i == startingPlayerIndex) {
                 nameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_current_player_dart, 0, 0, 0);
                 nameTxt.setCompoundDrawablePadding(8);
+                if (nameTxt.getCompoundDrawables()[0] != null) {
+                    nameTxt.getCompoundDrawables()[0].setTint(textColor);
+                }
             }
             row.addView(nameTxt);
 
@@ -514,14 +532,16 @@ public class SecondFragment extends Fragment {
             TextView setsTxt = new TextView(getContext());
             setsTxt.setText(String.valueOf(player.getWonSetsNo()));
             setsTxt.setGravity(Gravity.CENTER);
-            setsTxt.setPadding(8, 8, 8, 8);
+            setsTxt.setPadding(16, 16, 16, 16);
+            setsTxt.setTextColor(textColor);
             row.addView(setsTxt);
 
             // Column 3: Legs
             TextView legsTxt = new TextView(getContext());
             legsTxt.setText(String.valueOf(player.getWonLegsNo()));
             legsTxt.setGravity(Gravity.CENTER);
-            legsTxt.setPadding(8, 8, 8, 8);
+            legsTxt.setPadding(16, 16, 16, 16);
+            legsTxt.setTextColor(textColor);
             row.addView(legsTxt);
 
             // Column 4: Score
@@ -529,13 +549,22 @@ public class SecondFragment extends Fragment {
             int score = (pl != null) ? pl.getCurrentScore() : currentMatch.getLegSize();
             scoreTxt.setText(String.valueOf(score));
             scoreTxt.setGravity(Gravity.CENTER);
-            scoreTxt.setPadding(8, 8, 8, 8);
+            scoreTxt.setPadding(16, 16, 16, 16);
             scoreTxt.setTextSize(18);
             scoreTxt.setTypeface(null, Typeface.BOLD);
+            scoreTxt.setTextColor(textColor);
             row.addView(scoreTxt);
 
             binding.tablePlayersScore.addView(row);
         }
+    }
+
+    private int getThemeColor(int attr) {
+        TypedValue typedValue = new TypedValue();
+        if (getContext() != null && getContext().getTheme().resolveAttribute(attr, typedValue, true)) {
+            return typedValue.data;
+        }
+        return Color.TRANSPARENT;
     }
 
     @Override
