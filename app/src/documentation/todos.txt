@@ -1,7 +1,4 @@
 
-6. what happens when put in background/when it comes back
-
-
 -------------advertisement banner at the bottom of the page
 What you need to do for Google Play
 Before you publish to Google Play with ads, you must:
@@ -17,6 +14,7 @@ Cumulative across the match: The statistic is not an average of individual leg s
 Losing legs count: For a leg a player does not win, only the actual points scored (e.g., (501 - score remaining) and the actual darts thrown by that player in that leg are added to the totals.
 Winning turn rule: If a player hits a checkout on the 1st or 2nd dart of a visit, only 1 or 2 darts are added to the total dart count for that visit (not a full 3).
 Bust rule: If a player busts their score on the 1st or 2nd dart, the visit is treated as a full 3 darts thrown with 0 points scored for that turn.
+
 
 ------------improve match summary page with more info
 - players and the legs won

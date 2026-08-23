@@ -3,29 +3,65 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
+    <!-- Main Board Circle (Outer edge) - Elliptical for side view -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="1"
+        android:pathData="M12,2 C16.418,2 20,6.477 20,12 C20,17.523 16.418,22 12,22 C7.582,22 4,17.523 4,12 C4,6.477 7.582,2 12,2 Z" />
 
-    <group
-        android:pivotX="12"
-        android:pivotY="12"
-        android:scaleX="0.8"
-        android:scaleY="0.8">
+    <!-- Double Ring (Approx 9-10 radius) -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.5"
+        android:pathData="M12,3 C15.866,3 19,7.03 19,12 C19,16.97 15.866,21 12,21 C8.134,21 5,16.97 5,12 C5,7.03 8.134,3 12,3 Z" />
 
-        <!-- Dart 1 -->
-        <group android:rotation="45" android:pivotX="12" android:pivotY="12">
-            <path android:fillColor="#000000" android:pathData="M2,12 L5,12" android:strokeColor="#000000" android:strokeWidth="0.5"/>
-            <path android:fillColor="#000000" android:pathData="M5,11 L10,11 L10,13 L5,13 Z" />
-            <path android:fillColor="#000000" android:pathData="M10,11.8 L18,11.8 L18,12.2 L10,12.2 Z" />
-            <path android:fillColor="#000000" android:pathData="M18,12 L23,8 L21.5,12 L23,16 Z" />
-        </group>
+    <!-- Triple Ring (Approx 5-6 radius) -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.5"
+        android:pathData="M12,6.5 C14.485,6.5 16.5,8.962 16.5,12 C16.5,15.038 14.485,17.5 12,17.5 C9.515,17.5 7.5,15.038 7.5,12 C7.5,8.962 9.515,6.5 12,6.5 Z" />
 
-        <!-- Dart 2 -->
-        <group android:rotation="-45" android:pivotX="12" android:pivotY="12">
-            <path android:fillColor="#000000" android:pathData="M2,12 L5,12" android:strokeColor="#000000" android:strokeWidth="0.5"/>
-            <path android:fillColor="#000000" android:pathData="M5,11 L10,11 L10,13 L5,13 Z" />
-            <path android:fillColor="#000000" android:pathData="M10,11.8 L18,11.8 L18,12.2 L10,12.2 Z" />
-            <path android:fillColor="#000000" android:pathData="M18,12 L23,8 L21.5,12 L23,16 Z" />
-        </group>
+    <!-- Outer Bull (Radius 1.5) -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M12,10.5 C12.828,10.5 13.5,11.172 13.5,12 C13.5,12.828 12.828,13.5 12,13.5 C11.172,13.5 10.5,12.828 10.5,12 C10.5,11.172 11.172,10.5 12,10.5 Z" />
+    <!-- Inner Bullseye (Radius 0.7) -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M12,11.3 C12.387,11.3 12.7,11.613 12.7,12 C12.7,12.387 12.387,12.7 12,12.7 C11.613,12.7 11.3,12.387 11.3,12 C11.3,11.613 11.613,11.3 12,11.3 Z" />
 
-    </group>
+    <!-- Sector Lines (Reduced to half - 8 main lines for 10 sectors-ish/cleaner look) -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.3"
+        android:pathData="
+            M12,10.5 L12,2
+            M12,13.5 L12,22
+            M10.5,12 L4,12
+            M13.5,12 L20,12
+            M10.9,10.9 L6.5,6.5
+            M13.1,13.1 L17.5,17.5
+            M13.1,10.9 L17.5,6.5
+            M10.9,13.1 L6.5,17.5
+        " />
 
+    <!-- Red Dart Arrow hitting bullseye -->
+    <!-- Thicker Tapered Shaft (Body) -->
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M12,12 L19,9.5 L19,11.5 Z" />
+
+    <!-- Thicker Flights (Flippers) - Attached to the end of the body -->
+    <!-- Top Flight -->
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M19,10.5 L17.5,8 L21.5,8 L20.5,10.5 Z" />
+    <!-- Bottom Flight -->
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M19,10.5 L17.5,13 L21.5,13 L20.5,10.5 Z" />
+    <!-- Side/Back Flight -->
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M19,10.5 L22.5,10.5 L21,9 Z" />
 </vector>
