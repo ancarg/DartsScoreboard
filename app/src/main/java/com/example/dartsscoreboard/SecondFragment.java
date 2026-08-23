@@ -634,5 +634,8 @@ public class SecondFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        currentMatch = null;
+        currentSet = null;
+        currentLeg = null;
     }
 }

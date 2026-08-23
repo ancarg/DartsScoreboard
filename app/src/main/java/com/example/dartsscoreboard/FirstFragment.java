@@ -48,16 +48,22 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize with existing buttons
-        playerButtonIds.add(binding.buttonPlayer1.getId());
-        playerButtonIds.add(binding.buttonPlayer2.getId());
-
         binding.buttonPlayer1.setOnClickListener(v -> showEditPlayerDialog(binding.buttonPlayer1));
         binding.buttonPlayer2.setOnClickListener(v -> showEditPlayerDialog(binding.buttonPlayer2));
 
         binding.buttonAddPlayer.setOnClickListener(v -> addPlayer());
 
-        binding.edittextSetsToWinMatch.setText(String.valueOf(defaultSetsToWinMatch));
+        setupLegLengthDropdown();
+
+        // AdRequest adRequest = new AdRequest.Builder().build();
+        // binding.adView.loadAd(adRequest);
+
+        binding.buttonStart.setOnClickListener(v -> startGame());
+        
+        setupInputListeners();
+    }
+
+    private void setupInputListeners() {
         binding.edittextSetsToWinMatch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -85,7 +91,6 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        binding.edittextLegsToWin.setText(String.valueOf(defaultLegsToWinSet));
         binding.edittextLegsToWin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -112,13 +117,12 @@ public class FirstFragment extends Fragment {
                 }
             }
         });
+    }
 
-        setupLegLengthDropdown();
-
-        // AdRequest adRequest = new AdRequest.Builder().build();
-        // binding.adView.loadAd(adRequest);
-
-        binding.buttonStart.setOnClickListener(v -> startGame());
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetState();
     }
 
     private void setupLegLengthDropdown() {
@@ -260,6 +264,40 @@ public class FirstFragment extends Fragment {
         });
 
         dialog.show();
+    }
+
+    private void resetState() {
+        if (binding == null) return;
+
+        playerSequence = 2;
+        playerButtonIds.clear();
+        
+        // Ensure standard buttons are present and have default text
+        binding.buttonPlayer1.setText(getString(R.string.player_label, 1));
+        binding.buttonPlayer2.setText(getString(R.string.player_label, 2));
+        
+        // Remove all dynamic views first
+        binding.playerButtonsContainer.removeAllViews();
+        
+        // Re-add the two default buttons
+        binding.playerButtonsContainer.addView(binding.buttonPlayer1);
+        binding.playerButtonsContainer.addView(binding.buttonPlayer2);
+        
+        // Re-apply margins for the second button since removeAllViews/addView might strip them
+        LinearLayout.LayoutParams params2 = (LinearLayout.LayoutParams) binding.buttonPlayer2.getLayoutParams();
+        params2.topMargin = (int) (16 * getResources().getDisplayMetrics().density);
+        binding.buttonPlayer2.setLayoutParams(params2);
+
+        playerButtonIds.add(binding.buttonPlayer1.getId());
+        playerButtonIds.add(binding.buttonPlayer2.getId());
+
+        defaultSetsToWinMatch = 6;
+        defaultLegsToWinSet = 3;
+        selectedLegLength = 301;
+        
+        binding.edittextSetsToWinMatch.setText(String.valueOf(defaultSetsToWinMatch));
+        binding.edittextLegsToWin.setText(String.valueOf(defaultLegsToWinSet));
+        binding.dropdownLegLength.setText(String.valueOf(selectedLegLength), false);
     }
 
     @Override
