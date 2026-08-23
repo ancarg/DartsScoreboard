@@ -112,6 +112,7 @@ public class SecondFragment extends Fragment {
         TextWatcher throwWatcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateTripleButtonState();
                 validateThrows();
                 calculateAndDisplayTotal();
             }
@@ -161,6 +162,23 @@ public class SecondFragment extends Fragment {
         binding.buttonSubmit.setOnClickListener(v -> handleSubmit());
     }
 
+    private void updateTripleButtonState() {
+        binding.buttonTriple1.setEnabled(!"25".equals(binding.edittextThrow1.getText().toString()));
+        binding.buttonTriple2.setEnabled(!"25".equals(binding.edittextThrow2.getText().toString()));
+        binding.buttonTriple3.setEnabled(!"25".equals(binding.edittextThrow3.getText().toString()));
+        
+        // If Triple was selected and user typed 25, clear selection
+        if ("25".equals(binding.edittextThrow1.getText().toString()) && binding.toggleGroupThrowType1.getCheckedButtonId() == R.id.button_triple_1) {
+            binding.toggleGroupThrowType1.clearChecked();
+        }
+        if ("25".equals(binding.edittextThrow2.getText().toString()) && binding.toggleGroupThrowType2.getCheckedButtonId() == R.id.button_triple_2) {
+            binding.toggleGroupThrowType2.clearChecked();
+        }
+        if ("25".equals(binding.edittextThrow3.getText().toString()) && binding.toggleGroupThrowType3.getCheckedButtonId() == R.id.button_triple_3) {
+            binding.toggleGroupThrowType3.clearChecked();
+        }
+    }
+
     private void calculateAndDisplayTotal() {
         if (binding == null || currentMatch == null || currentLeg == null) return;
 
@@ -184,14 +202,16 @@ public class SecondFragment extends Fragment {
         if (valueStr.isEmpty()) return 0;
         try {
             int value = Integer.parseInt(valueStr);
-            if (value > 20 && value != 25 && value != 50) return 0;
+            // Valid scores are 0-20 and 25
+            if (value < 0 || (value > 20 && value != 25)) return 0;
             
             int multiplier = 1;
             int checkedId = toggleGroup.getCheckedButtonId();
             if (checkedId == R.id.button_double_1 || checkedId == R.id.button_double_2 || checkedId == R.id.button_double_3) {
                 multiplier = 2;
             } else if (checkedId == R.id.button_triple_1 || checkedId == R.id.button_triple_2 || checkedId == R.id.button_triple_3) {
-                multiplier = 3;
+                // Triple 25 is invalid, should be disabled in UI, but safety check here
+                multiplier = (value == 25) ? 0 : 3;
             } else if (checkedId == R.id.button_strike_1 || checkedId == R.id.button_strike_2 || checkedId == R.id.button_strike_3) {
                 multiplier = 0;
             }
@@ -217,14 +237,15 @@ public class SecondFragment extends Fragment {
         }
         try {
             int score = Integer.parseInt(val);
-            if (score > 20 && score != 25 && score != 50) {
-                layout.setError("Invalid score");
+            // Valid scores are 0-20 and 25. 21-24 and >25 are invalid. Negative are invalid.
+            if (score < 0 || (score > 20 && score != 25)) {
+                layout.setError("Valid: 0-20, 25");
                 return false;
             }
             layout.setError(null);
             return true;
         } catch (NumberFormatException e) {
-            layout.setError("Invalid");
+            layout.setError("Integer only");
             return false;
         }
     }
