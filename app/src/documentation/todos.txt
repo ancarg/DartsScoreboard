@@ -26,5 +26,5 @@ Bust rule: If a player busts their score on the 1st or 2nd dart, the visit is tr
 - (check flashscore for ideas)
 
 ------------future ideas
-db persistence in the future maybe
+-db persistence in the future maybe
 -extend the model to add a new class player set which has the setAverage property (similar to PlayerLeg)
