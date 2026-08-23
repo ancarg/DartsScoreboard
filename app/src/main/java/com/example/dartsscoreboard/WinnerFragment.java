@@ -58,14 +58,14 @@ public class WinnerFragment extends Fragment {
 
             if (names != null && averages != null && sets != null) {
                 int purpleColor = ContextCompat.getColor(requireContext(), R.color.winner_purple);
-                int lightGrayColor = ContextCompat.getColor(requireContext(), R.color.others_light_gray);
+                int darkerGrayColor = ContextCompat.getColor(requireContext(), R.color.others_darker_gray);
 
                 boolean isDarkMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
                 int strokeColor = isDarkMode ? getThemeColor(com.google.android.material.R.attr.colorOutline) : Color.BLACK;
 
                 for (int i = 0; i < names.size(); i++) {
                     boolean isWinner = (i == 0);
-                    int bgColor = isWinner ? purpleColor : lightGrayColor;
+                    int bgColor = isWinner ? purpleColor : darkerGrayColor;
                     int contentTextColor = isWinner ? Color.WHITE : Color.BLACK;
                     
                     addPlayerSummaryCard(names.get(i), averages[i], sets[i], bgColor, contentTextColor, strokeColor);
