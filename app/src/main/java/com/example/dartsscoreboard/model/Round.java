@@ -7,11 +7,20 @@ public class Round {
     private String legId;
 
     private String throwsTotalScore;
+    private int dartsCount;
 
     private ArrayList<Throw> throwsList  = new ArrayList<>();
     public Round(String legId) {
         id = "IDR-" + java.util.UUID.randomUUID().toString();
         this.legId = legId;
+    }
+
+    public int getDartsCount() {
+        return dartsCount;
+    }
+
+    public void setDartsCount(int dartsCount) {
+        this.dartsCount = dartsCount;
     }
 
     public ArrayList<Throw> getThrowsList() {

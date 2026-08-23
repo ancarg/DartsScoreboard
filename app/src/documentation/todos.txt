@@ -5,7 +5,8 @@
     - match history maybe
     - (check flashscore for ideas)
 
-
+111- add a new class player set which has the setAverage property
+111 - rename then the playerAverage to matchAverage
 5 cleanup state on closing the match
 6. what happens when put in background/when it comes back
 7. db persistence in the future maybe
@@ -17,3 +18,12 @@ Before you publish to Google Play with ads, you must:
 1.Create an AdMob Account: You need to register your app there to get a unique "Ad Unit ID."
 2.Declare Ads: In the Google Play Console, you must check a box stating "My app contains ads." This adds the "Contains Ads" label to your store listing.
 3.Privacy Policy: Because ads track user data (like device IDs), you are legally required to have a Privacy Policy link in your app and on your store listing.
+
+
+------------average calculation
+PDC match averages are calculated as a three-dart average using total points scored divided by total darts thrown, multiplied by 3.
+3-Dart Average = (Total Points Scored/Total Darts Thrown) * 3
+Cumulative across the match: The statistic is not an average of individual leg scores. Instead, every point scored in every leg is summed up and divided by the entire match dart count.
+Losing legs count: For a leg a player does not win, only the actual points scored (e.g., (501 - score remaining) and the actual darts thrown by that player in that leg are added to the totals.
+Winning turn rule: If a player hits a checkout on the 1st or 2nd dart of a visit, only 1 or 2 darts are added to the total dart count for that visit (not a full 3).
+Bust rule: If a player busts their score on the 1st or 2nd dart, the visit is treated as a full 3 darts thrown with 0 points scored for that turn.

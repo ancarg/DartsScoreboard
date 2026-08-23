@@ -286,14 +286,16 @@ public class SecondFragment extends Fragment {
 
         if (pl == null) return;
 
-        int totalRoundScore = 0;
-        totalRoundScore += getValidatedThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
-        totalRoundScore += getValidatedThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
-        totalRoundScore += getValidatedThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
+        int s1 = getValidatedThrowScore(binding.edittextThrow1, binding.toggleGroupThrowType1);
+        int s2 = getValidatedThrowScore(binding.edittextThrow2, binding.toggleGroupThrowType2);
+        int s3 = getValidatedThrowScore(binding.edittextThrow3, binding.toggleGroupThrowType3);
+        int totalRoundScore = s1 + s2 + s3;
 
-        boolean isCheckout = (totalRoundScore == pl.getCurrentScore());
+        int currentScore = pl.getCurrentScore();
+        boolean isCheckout = (totalRoundScore == currentScore);
+        boolean isBust = (totalRoundScore > currentScore || (currentScore - totalRoundScore == 1));
 
-        if (!isCheckout && isAnyThrowEmpty()) {
+        if (!isCheckout && !isBust && isAnyThrowEmpty()) {
             Toast.makeText(getContext(), R.string.throws_remaining, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -303,25 +305,38 @@ public class SecondFragment extends Fragment {
             return;
         }
 
+        int dartsThrown = 3;
+        if (isCheckout) {
+            if (s1 == currentScore) {
+                dartsThrown = 1;
+            } else if (s1 + s2 == currentScore) {
+                dartsThrown = 2;
+            }
+        }
+
+        if (isBust) {
+            totalRoundScore = 0;
+            Toast.makeText(getContext(), "Bust!", Toast.LENGTH_SHORT).show();
+        }
+
         Round round = new Round(currentLeg.getId());
         round.setThrowsTotalScore(String.valueOf(totalRoundScore));
+        round.setDartsCount(dartsThrown);
         if (pl.getRoundsList() == null) pl.setRoundsList(new ArrayList<>());
         pl.getRoundsList().add(round);
 
         updatePlayerAverage(currentPlayer);
 
-        int newScore = pl.getCurrentScore() - totalRoundScore;
-        if (newScore >= 0) {
+        if (!isBust) {
+            int newScore = currentScore - totalRoundScore;
             pl.setCurrentScore(newScore);
             if (newScore == 0) {
                 Toast.makeText(getContext(), currentPlayer.getDisplayName() + " won the leg!", Toast.LENGTH_LONG).show();
                 currentPlayer.setWonLegsNo(currentPlayer.getWonLegsNo() + 1);
                 currentLeg.setWinnerId(currentPlayer.getId());
                 startNewLeg();
-                return; // startNewLeg handles UI refresh and player resets
+                return;
             }
-        } else {
-            Toast.makeText(getContext(), "Bust!", Toast.LENGTH_SHORT).show();
         }
 
         clearInputs();
@@ -458,21 +473,21 @@ public class SecondFragment extends Fragment {
 
     private void updatePlayerAverage(Player player) {
         int totalScore = 0;
-        int totalRounds = 0;
+        int totalDarts = 0;
         if (player.getPlayerLegsList() != null) {
             for (PlayerLeg pl : player.getPlayerLegsList()) {
                 if (pl.getRoundsList() != null) {
                     for (Round round : pl.getRoundsList()) {
                         try {
                             totalScore += Integer.parseInt(round.getThrowsTotalScore());
-                            totalRounds++;
+                            totalDarts += round.getDartsCount();
                         } catch (NumberFormatException ignored) {}
                     }
                 }
             }
         }
-        if (totalRounds > 0) {
-            player.setPlayerAverage((float) totalScore / totalRounds);
+        if (totalDarts > 0) {
+            player.setPlayerAverage((float) totalScore / totalDarts * 3);
         } else {
             player.setPlayerAverage(0.0f);
         }
