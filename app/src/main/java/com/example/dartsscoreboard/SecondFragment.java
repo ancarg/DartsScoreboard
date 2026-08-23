@@ -184,7 +184,7 @@ public class SecondFragment extends Fragment {
         if (valueStr.isEmpty()) return 0;
         try {
             int value = Integer.parseInt(valueStr);
-            if (value > 20) return 0;
+            if (value > 20 && value != 25 && value != 50) return 0;
             
             int multiplier = 1;
             int checkedId = toggleGroup.getCheckedButtonId();
@@ -217,8 +217,8 @@ public class SecondFragment extends Fragment {
         }
         try {
             int score = Integer.parseInt(val);
-            if (score > 20) {
-                layout.setError("Max 20");
+            if (score > 20 && score != 25 && score != 50) {
+                layout.setError("Invalid score");
                 return false;
             }
             layout.setError(null);
