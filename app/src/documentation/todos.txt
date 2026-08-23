@@ -1,15 +1,5 @@
-1. when the match ends (one player wins x legs), a summary of the match should be displayed
-    - players and the legs won
-    - number of 180s
-    - averages
-    - match history maybe
-    - (check flashscore for ideas)
 
-111- add a new class player set which has the setAverage property
-111 - rename then the playerAverage to matchAverage
-5. cleanup state on closing the match
 6. what happens when put in background/when it comes back
-7. db persistence in the future maybe
 
 
 -------------advertisement banner at the bottom of the page
@@ -27,3 +17,14 @@ Cumulative across the match: The statistic is not an average of individual leg s
 Losing legs count: For a leg a player does not win, only the actual points scored (e.g., (501 - score remaining) and the actual darts thrown by that player in that leg are added to the totals.
 Winning turn rule: If a player hits a checkout on the 1st or 2nd dart of a visit, only 1 or 2 darts are added to the total dart count for that visit (not a full 3).
 Bust rule: If a player busts their score on the 1st or 2nd dart, the visit is treated as a full 3 darts thrown with 0 points scored for that turn.
+
+------------improve match summary page with more info
+- players and the legs won
+- number of 180s
+- averages
+- match history maybe
+- (check flashscore for ideas)
+
+------------future ideas
+db persistence in the future maybe
+-extend the model to add a new class player set which has the setAverage property (similar to PlayerLeg)

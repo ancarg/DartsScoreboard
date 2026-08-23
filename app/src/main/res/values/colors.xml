@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="highlight_turn">#3300FF00</color>
     <color name="highlight_selected">#33888888</color>
+    <color name="winner_purple">#673AB7</color>
+    <color name="others_gray">#757575</color>
 </resources>
