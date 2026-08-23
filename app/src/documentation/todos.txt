@@ -7,7 +7,7 @@
 
 111- add a new class player set which has the setAverage property
 111 - rename then the playerAverage to matchAverage
-5 cleanup state on closing the match
+5. cleanup state on closing the match
 6. what happens when put in background/when it comes back
 7. db persistence in the future maybe
 

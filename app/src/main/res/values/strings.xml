@@ -47,5 +47,6 @@
     <string name="score_label">Score</string>
     <string name="congratulations_format">Congratulations %s!</string>
     <string name="close">Close</string>
-    <string name="winner_fragment_label">Winner</string>
+    <string name="match_summary">Match Summary</string>
+    <string name="average_label">Average : %s</string>
 </resources>

@@ -372,8 +372,26 @@ public class SecondFragment extends Fragment {
 
             // Check if player won the match
             if (setWinner != null && setWinner.getWonSetsNo() >= currentMatch.getSetsNo()) {
+                List<Player> sortedPlayers = new ArrayList<>(currentMatch.getPlayersList());
+                // Sort players by won sets descending
+                sortedPlayers.sort((p1, p2) -> Integer.compare(p2.getWonSetsNo(), p1.getWonSetsNo()));
+
+                ArrayList<String> names = new ArrayList<>();
+                float[] averages = new float[sortedPlayers.size()];
+                int[] setsWon = new int[sortedPlayers.size()];
+
+                for (int i = 0; i < sortedPlayers.size(); i++) {
+                    Player p = sortedPlayers.get(i);
+                    names.add(p.getDisplayName());
+                    averages[i] = p.getPlayerAverage() != null ? p.getPlayerAverage() : 0.0f;
+                    setsWon[i] = p.getWonSetsNo();
+                }
+
                 Bundle bundle = new Bundle();
-                bundle.putString("winnerName", setWinner.getDisplayName());
+                bundle.putStringArrayList("playerNames", names);
+                bundle.putFloatArray("playerAverages", averages);
+                bundle.putIntArray("playerSets", setsWon);
+
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_SecondFragment_to_WinnerFragment, bundle);
                 return;

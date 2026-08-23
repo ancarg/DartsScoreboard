@@ -35,6 +35,6 @@
     <fragment
         android:id="@+id/WinnerFragment"
         android:name="com.example.dartsscoreboard.WinnerFragment"
-        android:label="@string/winner_fragment_label"
+        android:label="@string/match_summary"
         tools:layout="@layout/fragment_winner" />
 </navigation>
