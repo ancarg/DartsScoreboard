@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Darts Scoreboard</string>
     <string name="action_disclaimer">Disclaimer</string>
-    <string name="disclaimer_text">This application doesn\'t store data anywhere and doesn\'t comunicate with any exernal resources. Also it doesn\'t access any data on the device where it is installed. The data is kept only in the current session therefor closing the application will discard all the progress of the current match.</string>
+    <string name="disclaimer_text">This application doesn\'t store data anywhere and doesn\'t comunicate with any exernal services. Also it doesn\'t access any data on the device where it is installed. The data is kept only in the current session so closing the application will discard all data along with the progress of the current match.</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Darts Score</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -40,6 +40,7 @@
     <string name="no">No</string>
     <string name="throws_remaining">The player still has throws left</string>
     <string name="round_score_with_remaining">%1$d (%2$d)</string>
+    <string name="player_average_format">Avg: %1$.2f</string>
     <string name="first_to_sets_label">First to %d</string>
     <string name="sets_label">Sets</string>
     <string name="legs_label_table">Legs</string>

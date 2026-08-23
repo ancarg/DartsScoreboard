@@ -422,13 +422,12 @@ public class SecondFragment extends Fragment {
             }
         }
 
-        Player activePlayer = currentMatch.getPlayersList().get(actualTurnPlayerIndex);
-        binding.textviewActivePlayerName.setText(activePlayer.getDisplayName());
+        binding.textviewActivePlayerName.setText(selectedPlayer.getDisplayName());
 
-        if (activePlayer.getPlayerAverage() != null) {
-            binding.textviewPlayerAverage.setText(String.format(Locale.getDefault(), "Avg: %.2f", activePlayer.getPlayerAverage()));
+        if (selectedPlayer.getPlayerAverage() != null) {
+            binding.textviewPlayerAverage.setText(getString(R.string.player_average_format, selectedPlayer.getPlayerAverage()));
         } else {
-            binding.textviewPlayerAverage.setText("Avg: 0.00");
+            binding.textviewPlayerAverage.setText(getString(R.string.player_average_format, 0.0f));
         }
 
         PlayerLeg selectedPL = getCurrentPlayerLeg(selectedPlayer, currentLeg);
